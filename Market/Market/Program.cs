@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Algolia.Search.Clients; 
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddCors(options =>
 {
@@ -18,8 +20,26 @@ builder.Services.AddCors(options =>
     });
 });
 
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+var algoliaSettings = builder.Configuration.GetSection("Algolia");
+string algoliaAppId = algoliaSettings["AppId"];
+string algoliaApiKey = algoliaSettings["ApiKey"];
+
+
+if (!string.IsNullOrEmpty(algoliaAppId) && !string.IsNullOrEmpty(algoliaApiKey))
+{
+    builder.Services.AddSingleton<ISearchClient>(new SearchClient(algoliaAppId, algoliaApiKey));
+}
+else
+{
+   
+    Console.WriteLine("OSTRZE¯ENIE: Brak konfiguracji Algolia w appsettings.json. Wyszukiwarka nie bêdzie dzia³aæ.");
+}
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -55,6 +75,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddControllers();
 
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -87,6 +108,7 @@ builder.Services.AddHostedService<ExpiredAnnouncementsCleanupService>();
 
 var app = builder.Build();
 
+
 app.UseCookiePolicy(new CookiePolicyOptions
 {
     HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
@@ -110,6 +132,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
 
 public class ExpiredAnnouncementsCleanupService : BackgroundService
 {

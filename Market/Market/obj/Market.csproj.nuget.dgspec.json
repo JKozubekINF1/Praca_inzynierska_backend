@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\tytaj\\Desktop\\Inzynier\\Backend\\Market\\Market\\Market.csproj": {}
+    "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Market.csproj": {}
   },
   "projects": {
-    "C:\\Users\\tytaj\\Desktop\\Inzynier\\Backend\\Market\\Market\\Market.csproj": {
+    "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Market.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\tytaj\\Desktop\\Inzynier\\Backend\\Market\\Market\\Market.csproj",
+        "projectUniqueName": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Market.csproj",
         "projectName": "Market",
-        "projectPath": "C:\\Users\\tytaj\\Desktop\\Inzynier\\Backend\\Market\\Market\\Market.csproj",
+        "projectPath": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Market.csproj",
         "packagesPath": "C:\\Users\\tytaj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\tytaj\\Desktop\\Inzynier\\Backend\\Market\\Market\\obj\\",
+        "outputPath": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -44,12 +44,16 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Algolia.Search": {
+              "target": "Package",
+              "version": "[6.15.0, )"
+            },
             "BCrypt.Net-Next": {
               "target": "Package",
               "version": "[4.0.3, )"
@@ -104,7 +108,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

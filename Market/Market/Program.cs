@@ -1,34 +1,37 @@
+using Algolia.Search.Clients;
 using Market.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
-using Algolia.Search.Clients; 
+using System.Text;
+using System.Text.Json.Serialization;
+using Market.Services;
+using Market.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend", builder =>
+    options.AddPolicy("DevelopmentCors", policyBuilder =>
     {
-        builder.WithOrigins("https://localhost:3000")
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials();
+        policyBuilder.SetIsOriginAllowed(origin => true) 
+                     .AllowAnyMethod()
+                     .AllowAnyHeader()
+                     .AllowCredentials(); 
     });
 });
-
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IFileService, LocalFileService>();
+builder.Services.AddScoped<ISearchService, AlgoliaSearchService>();
+builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 var algoliaSettings = builder.Configuration.GetSection("Algolia");
 string algoliaAppId = algoliaSettings["AppId"];
 string algoliaApiKey = algoliaSettings["ApiKey"];
-
 
 if (!string.IsNullOrEmpty(algoliaAppId) && !string.IsNullOrEmpty(algoliaApiKey))
 {
@@ -36,10 +39,8 @@ if (!string.IsNullOrEmpty(algoliaAppId) && !string.IsNullOrEmpty(algoliaApiKey))
 }
 else
 {
-   
-    Console.WriteLine("OSTRZE¯ENIE: Brak konfiguracji Algolia w appsettings.json. Wyszukiwarka nie bêdzie dzia³aæ.");
+    Console.WriteLine("OSTRZE¯ENIE: Brak konfiguracji Algolia w appsettings.json.");
 }
-
 
 builder.Services.AddAuthentication(options =>
 {
@@ -56,7 +57,7 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(
-            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Brak klucza JWT w konfiguracji.")))
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Brak klucza JWT.")))
     };
 
     options.Events = new JwtBearerEvents
@@ -73,13 +74,17 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddControllers();
-
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Market API", Version = "v1" });
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -108,14 +113,13 @@ builder.Services.AddHostedService<ExpiredAnnouncementsCleanupService>();
 
 var app = builder.Build();
 
-
 app.UseCookiePolicy(new CookiePolicyOptions
 {
     HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always,
     Secure = CookieSecurePolicy.Always
 });
 
-app.UseCors("AllowFrontend");
+app.UseCors("DevelopmentCors");
 
 if (app.Environment.IsDevelopment())
 {
@@ -127,12 +131,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
-
 
 public class ExpiredAnnouncementsCleanupService : BackgroundService
 {
@@ -174,7 +179,6 @@ public class ExpiredAnnouncementsCleanupService : BackgroundService
             {
                 _logger.LogError(ex, "Error occurred while cleaning up expired announcements.");
             }
-
 
             await Task.Delay(TimeSpan.FromHours(24), stoppingToken);
         }

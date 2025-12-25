@@ -9,18 +9,41 @@ namespace Market.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<VehicleDetails> VehicleDetails { get; set; }
+        public DbSet<PartDetails> PartDetails { get; set; }
+        public DbSet<AnnouncementFeature> AnnouncementFeatures { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Announcement>()
-               .HasOne(a => a.User)
-               .WithMany(u => u.Announcements)
-               .HasForeignKey(a => a.UserId)
-               .OnDelete(DeleteBehavior.Cascade); 
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Announcement>()
-                .Property(a => a.TypeSpecificData)
-                .HasColumnType("nvarchar(max)");
+                .HasOne(a => a.User)
+                .WithMany(u => u.Announcements)
+                .HasForeignKey(a => a.UserId)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            modelBuilder.Entity<Announcement>()
+                .HasOne(a => a.VehicleDetails)
+                .WithOne(v => v.Announcement)
+                .HasForeignKey<VehicleDetails>(v => v.AnnouncementId)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            modelBuilder.Entity<Announcement>()
+                .HasOne(a => a.PartDetails)
+                .WithOne(p => p.Announcement)
+                .HasForeignKey<PartDetails>(p => p.AnnouncementId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Announcement>()
+                .HasMany(a => a.Features)
+                .WithOne(f => f.Announcement)
+                .HasForeignKey(f => f.AnnouncementId)
+                .OnDelete(DeleteBehavior.Cascade); 
+
+            modelBuilder.Entity<Announcement>()
+                .Property(a => a.Price)
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

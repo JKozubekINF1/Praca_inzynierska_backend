@@ -12,58 +12,191 @@
         ],
         "requestBody": {
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
-                "$ref": "#/components/schemas/AnnouncementDto"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AnnouncementDto"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AnnouncementDto"
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Price": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Category": {
+                    "type": "string"
+                  },
+                  "PhoneNumber": {
+                    "type": "string"
+                  },
+                  "ContactPreference": {
+                    "type": "string"
+                  },
+                  "Location": {
+                    "type": "string"
+                  },
+                  "Features": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "VehicleDetails.Brand": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Model": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Generation": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Year": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.Mileage": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.EnginePower": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.EngineCapacity": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.FuelType": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Gearbox": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.BodyType": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.DriveType": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Color": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.VIN": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.State": {
+                    "type": "string"
+                  },
+                  "PartDetails.PartName": {
+                    "type": "string"
+                  },
+                  "PartDetails.PartNumber": {
+                    "type": "string"
+                  },
+                  "PartDetails.Compatibility": {
+                    "type": "string"
+                  },
+                  "PartDetails.State": {
+                    "type": "string"
+                  },
+                  "Photos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Price": {
+                  "style": "form"
+                },
+                "Category": {
+                  "style": "form"
+                },
+                "PhoneNumber": {
+                  "style": "form"
+                },
+                "ContactPreference": {
+                  "style": "form"
+                },
+                "Location": {
+                  "style": "form"
+                },
+                "Features": {
+                  "style": "form"
+                },
+                "VehicleDetails.Brand": {
+                  "style": "form"
+                },
+                "VehicleDetails.Model": {
+                  "style": "form"
+                },
+                "VehicleDetails.Generation": {
+                  "style": "form"
+                },
+                "VehicleDetails.Year": {
+                  "style": "form"
+                },
+                "VehicleDetails.Mileage": {
+                  "style": "form"
+                },
+                "VehicleDetails.EnginePower": {
+                  "style": "form"
+                },
+                "VehicleDetails.EngineCapacity": {
+                  "style": "form"
+                },
+                "VehicleDetails.FuelType": {
+                  "style": "form"
+                },
+                "VehicleDetails.Gearbox": {
+                  "style": "form"
+                },
+                "VehicleDetails.BodyType": {
+                  "style": "form"
+                },
+                "VehicleDetails.DriveType": {
+                  "style": "form"
+                },
+                "VehicleDetails.Color": {
+                  "style": "form"
+                },
+                "VehicleDetails.VIN": {
+                  "style": "form"
+                },
+                "VehicleDetails.State": {
+                  "style": "form"
+                },
+                "PartDetails.PartName": {
+                  "style": "form"
+                },
+                "PartDetails.PartNumber": {
+                  "style": "form"
+                },
+                "PartDetails.Compatibility": {
+                  "style": "form"
+                },
+                "PartDetails.State": {
+                  "style": "form"
+                },
+                "Photos": {
+                  "style": "form"
+                }
               }
             }
           }
         },
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/Announcements/{id}/renew": {
-      "post": {
-        "tags": [
-          "Announcements"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/Announcements/active": {
-      "get": {
-        "tags": [
-          "Announcements"
-        ],
         "responses": {
           "200": {
             "description": "Success"
@@ -106,6 +239,29 @@
         }
       }
     },
+    "/api/Announcements/{id}/renew": {
+      "post": {
+        "tags": [
+          "Announcements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
     "/api/Announcements/{id}/activate": {
       "post": {
         "tags": [
@@ -129,10 +285,88 @@
         }
       }
     },
-    "/api/Announcements/sync-algolia": {
-      "post": {
+    "/api/Announcements/search": {
+      "get": {
         "tags": [
           "Announcements"
+        ],
+        "parameters": [
+          {
+            "name": "Query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Brand",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Model",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "MinPrice",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "MaxPrice",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "MinYear",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "MaxYear",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Category",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -141,76 +375,10 @@
         }
       }
     },
-    "/api/Announcements/search": {
-      "get": {
+    "/api/Announcements/sync-algolia": {
+      "post": {
         "tags": [
           "Announcements"
-        ],
-        "parameters": [
-          {
-            "name": "query",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "minPrice",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "format": "double"
-            }
-          },
-          {
-            "name": "maxPrice",
-            "in": "query",
-            "schema": {
-              "type": "number",
-              "format": "double"
-            }
-          },
-          {
-            "name": "minYear",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "maxYear",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          },
-          {
-            "name": "category",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 0
-            }
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "schema": {
-              "type": "integer",
-              "format": "int32",
-              "default": 20
-            }
-          }
         ],
         "responses": {
           "200": {
@@ -297,18 +465,6 @@
       "get": {
         "tags": [
           "Auth"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success"
-          }
-        }
-      }
-    },
-    "/api/Protected/test": {
-      "get": {
-        "tags": [
-          "Protected"
         ],
         "responses": {
           "200": {
@@ -404,59 +560,6 @@
   },
   "components": {
     "schemas": {
-      "AnnouncementDto": {
-        "required": [
-          "category",
-          "contactPreference",
-          "description",
-          "phoneNumber",
-          "price",
-          "title"
-        ],
-        "type": "object",
-        "properties": {
-          "title": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "description": {
-            "maxLength": 2000,
-            "minLength": 1,
-            "type": "string"
-          },
-          "price": {
-            "minimum": 0,01,
-            "type": "number",
-            "format": "double"
-          },
-          "isNegotiable": {
-            "type": "boolean"
-          },
-          "category": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "phoneNumber": {
-            "maxLength": 15,
-            "minLength": 1,
-            "type": "string"
-          },
-          "contactPreference": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "vehicleData": {
-            "$ref": "#/components/schemas/VehicleData"
-          },
-          "partData": {
-            "$ref": "#/components/schemas/PartData"
-          }
-        },
-        "additionalProperties": false
-      },
       "ChangePasswordDto": {
         "required": [
           "currentPassword",
@@ -483,42 +586,6 @@
             "nullable": true
           },
           "password": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "PartData": {
-        "required": [
-          "compatibility",
-          "condition",
-          "partName"
-        ],
-        "type": "object",
-        "properties": {
-          "partName": {
-            "maxLength": 100,
-            "minLength": 1,
-            "type": "string"
-          },
-          "partNumber": {
-            "maxLength": 50,
-            "type": "string",
-            "nullable": true
-          },
-          "condition": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "compatibility": {
-            "maxLength": 200,
-            "minLength": 1,
-            "type": "string"
-          },
-          "engineVersion": {
-            "maxLength": 50,
             "type": "string",
             "nullable": true
           }
@@ -578,105 +645,6 @@
           },
           "hasCompletedProfilePrompt": {
             "type": "boolean"
-          }
-        },
-        "additionalProperties": false
-      },
-      "VehicleData": {
-        "required": [
-          "bodyType",
-          "brand",
-          "color",
-          "condition",
-          "drive",
-          "engine",
-          "equipment",
-          "formalities",
-          "fuelType",
-          "history",
-          "mileage",
-          "model",
-          "transmission",
-          "year"
-        ],
-        "type": "object",
-        "properties": {
-          "brand": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "model": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "year": {
-            "maximum": 2100,
-            "minimum": 1900,
-            "type": "integer",
-            "format": "int32"
-          },
-          "equipmentVersion": {
-            "maxLength": 50,
-            "type": "string",
-            "nullable": true
-          },
-          "bodyType": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "color": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "engine": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "fuelType": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "transmission": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "drive": {
-            "maxLength": 50,
-            "minLength": 1,
-            "type": "string"
-          },
-          "mileage": {
-            "maximum": 2147483647,
-            "minimum": 0,
-            "type": "integer",
-            "format": "int32"
-          },
-          "condition": {
-            "maxLength": 2000,
-            "minLength": 1,
-            "type": "string"
-          },
-          "history": {
-            "maxLength": 2000,
-            "minLength": 1,
-            "type": "string"
-          },
-          "equipment": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
-          },
-          "formalities": {
-            "maxLength": 1000,
-            "minLength": 1,
-            "type": "string"
           }
         },
         "additionalProperties": false

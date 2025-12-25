@@ -8,9 +8,139 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "dto",
-        "Type": "Market.Models.AnnouncementDto",
-        "IsRequired": true
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Price",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "Category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContactPreference",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Features",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Brand",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Model",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Generation",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Mileage",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.EnginePower",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.EngineCapacity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.FuelType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Gearbox",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.BodyType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.DriveType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Color",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.VIN",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.State",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.PartName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.PartNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.Compatibility",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.State",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Photos",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -33,7 +163,7 @@
   },
   {
     "ContainingType": "Market.Controllers.AnnouncementsController",
-    "Method": "ActivateAnnouncement",
+    "Method": "Activate",
     "RelativePath": "api/Announcements/{id}/activate",
     "HttpMethod": "POST",
     "IsController": true,
@@ -49,7 +179,7 @@
   },
   {
     "ContainingType": "Market.Controllers.AnnouncementsController",
-    "Method": "RenewAnnouncement",
+    "Method": "Renew",
     "RelativePath": "api/Announcements/{id}/renew",
     "HttpMethod": "POST",
     "IsController": true,
@@ -65,16 +195,6 @@
   },
   {
     "ContainingType": "Market.Controllers.AnnouncementsController",
-    "Method": "GetActiveAnnouncements",
-    "RelativePath": "api/Announcements/active",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Market.Controllers.AnnouncementsController",
     "Method": "Search",
     "RelativePath": "api/Announcements/search",
     "HttpMethod": "GET",
@@ -82,42 +202,52 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "query",
+        "Name": "Query",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "minPrice",
-        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "maxPrice",
-        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "minYear",
-        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "maxYear",
-        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
-        "IsRequired": false
-      },
-      {
-        "Name": "category",
+        "Name": "Brand",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "page",
+        "Name": "Model",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "MinPrice",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MaxPrice",
+        "Type": "System.Nullable\u00601[[System.Decimal, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MinYear",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MaxYear",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "Category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Page",
         "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "pageSize",
+        "Name": "PageSize",
         "Type": "System.Int32",
         "IsRequired": false
       }
@@ -126,7 +256,7 @@
   },
   {
     "ContainingType": "Market.Controllers.AnnouncementsController",
-    "Method": "SyncAllToAlgolia",
+    "Method": "SyncAll",
     "RelativePath": "api/Announcements/sync-algolia",
     "HttpMethod": "POST",
     "IsController": true,
@@ -190,16 +320,6 @@
     "ContainingType": "Market.Controllers.AuthController",
     "Method": "Verify",
     "RelativePath": "api/Auth/verify",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Market.Controllers.ProtectedController",
-    "Method": "Test",
-    "RelativePath": "api/Protected/test",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

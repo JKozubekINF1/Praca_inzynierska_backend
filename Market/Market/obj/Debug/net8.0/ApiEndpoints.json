@@ -163,6 +163,173 @@
   },
   {
     "ContainingType": "Market.Controllers.AnnouncementsController",
+    "Method": "Delete",
+    "RelativePath": "api/Announcements/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AnnouncementsController",
+    "Method": "Update",
+    "RelativePath": "api/Announcements/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "Title",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Price",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "Category",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PhoneNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ContactPreference",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Features",
+        "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Brand",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Model",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Generation",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Year",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Mileage",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.EnginePower",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.EngineCapacity",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.FuelType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Gearbox",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.BodyType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.DriveType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.Color",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.VIN",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "VehicleDetails.State",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.PartName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.PartNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.Compatibility",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartDetails.State",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Photos",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=8.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AnnouncementsController",
     "Method": "Activate",
     "RelativePath": "api/Announcements/{id}/activate",
     "HttpMethod": "POST",

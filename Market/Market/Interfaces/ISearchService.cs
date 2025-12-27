@@ -8,5 +8,6 @@ namespace Market.Interfaces
         Task IndexAnnouncementAsync(Announcement announcement);
         Task<SearchResultDto> SearchAsync(SearchQueryDto query);
         Task IndexManyAnnouncementsAsync(IEnumerable<Announcement> announcements);
+        Task RemoveAsync(string objectId);
     }
 }

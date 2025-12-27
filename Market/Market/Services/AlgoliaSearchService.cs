@@ -1,7 +1,14 @@
 ﻿using Algolia.Search.Clients;
+using Algolia.Search.Models.Settings;
 using Market.DTOs;
 using Market.Interfaces;
-using Market.Models; 
+using Market.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Market.Services
 {
@@ -14,8 +21,45 @@ namespace Market.Services
         public AlgoliaSearchService(ISearchClient client, IConfiguration configuration, ILogger<AlgoliaSearchService> logger)
         {
             _client = client;
-            _indexName = configuration["Algolia:IndexName"];
+            _indexName = configuration["Algolia:IndexName"] ?? "announcements";
             _logger = logger;
+        }
+
+        public async Task ConfigureIndexSettingsAsync()
+        {
+            try
+            {
+                var index = _client.InitIndex(_indexName);
+                var settings = new IndexSettings
+                {
+                    NumericAttributesForFiltering = new List<string>
+                    {
+                        "expiresAt",
+                        "price",
+                        "year",
+                        "mileage",
+                        "enginePower",
+                        "engineCapacity"
+                    },
+
+                    AttributesForFaceting = new List<string>
+                    {
+                        "filterOnly(isActive)",
+                        "searchable(category)",
+                        "searchable(brand)",
+                        "searchable(model)",
+                        "searchable(fuelType)"
+                    }
+                };
+
+                await index.SetSettingsAsync(settings);
+                _logger.LogInformation("Wysłano ustawienia indeksu do Algolii (camelCase).");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd podczas konfigurowania indeksu Algolii.");
+                throw; 
+            }
         }
 
         public async Task IndexAnnouncementAsync(Announcement a)
@@ -23,14 +67,16 @@ namespace Market.Services
             try
             {
                 var index = _client.InitIndex(_indexName);
-
                 var indexModel = new AnnouncementIndexModel
                 {
                     ObjectID = a.Id.ToString(),
                     Id = a.Id,
                     Title = a.Title,
                     Price = a.Price,
-                    Category = a.Category
+                    Category = a.Category,
+                    PhotoUrl = a.PhotoUrl,
+                    IsActive = a.IsActive,
+                    ExpiresAt = ((DateTimeOffset)a.ExpiresAt).ToUnixTimeSeconds()
                 };
 
                 if (a.VehicleDetails != null)
@@ -45,10 +91,22 @@ namespace Market.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Błąd podczas indeksowania ogłoszenia {Id} w Algolii.", a.Id);
+                _logger.LogError(ex, "Błąd podczas indeksowania ogłoszenia {Id}.", a.Id);
             }
         }
 
+        public async Task RemoveAsync(string objectId)
+        {
+            try
+            {
+                var index = _client.InitIndex(_indexName);
+                await index.DeleteObjectAsync(objectId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Błąd usuwania obiektu {ObjectId}.", objectId);
+            }
+        }
 
         public async Task<SearchResultDto> SearchAsync(SearchQueryDto dto)
         {
@@ -60,9 +118,13 @@ namespace Market.Services
             if (dto.MinYear.HasValue) filters.Add($"year >= {dto.MinYear}");
             if (dto.MaxYear.HasValue) filters.Add($"year <= {dto.MaxYear}");
 
-            if (!string.IsNullOrEmpty(dto.Category)) filters.Add($"category:{dto.Category}");
-            if (!string.IsNullOrEmpty(dto.Brand)) filters.Add($"brand:{dto.Brand}");
-            if (!string.IsNullOrEmpty(dto.Model)) filters.Add($"model:{dto.Model}");
+            if (!string.IsNullOrEmpty(dto.Category)) filters.Add($"category:'{dto.Category}'");
+            if (!string.IsNullOrEmpty(dto.Brand)) filters.Add($"brand:'{dto.Brand}'");
+            if (!string.IsNullOrEmpty(dto.Model)) filters.Add($"model:'{dto.Model}'");
+
+            filters.Add("isActive:true");
+            long nowTimestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            filters.Add($"expiresAt > {nowTimestamp}");
 
             var searchQ = new Algolia.Search.Models.Search.Query(dto.Query ?? "")
             {
@@ -73,19 +135,36 @@ namespace Market.Services
 
             var result = await index.SearchAsync<AnnouncementIndexModel>(searchQ);
 
+            var items = result.Hits.Select(h => new SearchResultItem
+            {
+                Id = h.Id,
+                ObjectID = h.ObjectID,
+                Title = h.Title,
+                Price = h.Price,
+                Category = h.Category,
+                PhotoUrl = h.PhotoUrl,
+                Brand = h.Brand,
+                Model = h.Model,
+                Year = h.Year,
+                Mileage = h.Mileage,
+                Location = "Polska"
+            }).ToList();
+
             return new SearchResultDto
             {
                 TotalHits = result.NbHits,
                 TotalPages = result.NbPages,
                 CurrentPage = result.Page,
-                Items = result.Hits
+                Items = items
             };
         }
-
 
         public async Task IndexManyAnnouncementsAsync(IEnumerable<Announcement> announcements)
         {
             var index = _client.InitIndex(_indexName);
+
+            await ConfigureIndexSettingsAsync();
+
             var batch = new List<AnnouncementIndexModel>();
 
             foreach (var a in announcements)
@@ -96,7 +175,10 @@ namespace Market.Services
                     Id = a.Id,
                     Title = a.Title,
                     Price = a.Price,
-                    Category = a.Category
+                    Category = a.Category,
+                    PhotoUrl = a.PhotoUrl,
+                    IsActive = a.IsActive,
+                    ExpiresAt = ((DateTimeOffset)a.ExpiresAt).ToUnixTimeSeconds()
                 };
 
                 if (a.VehicleDetails != null)

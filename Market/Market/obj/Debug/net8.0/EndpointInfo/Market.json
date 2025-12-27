@@ -225,6 +225,235 @@
             "description": "Success"
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "Announcements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Announcements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Title": {
+                    "type": "string"
+                  },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "Price": {
+                    "type": "number",
+                    "format": "double"
+                  },
+                  "Category": {
+                    "type": "string"
+                  },
+                  "PhoneNumber": {
+                    "type": "string"
+                  },
+                  "ContactPreference": {
+                    "type": "string"
+                  },
+                  "Location": {
+                    "type": "string"
+                  },
+                  "Features": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "VehicleDetails.Brand": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Model": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Generation": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Year": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.Mileage": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.EnginePower": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.EngineCapacity": {
+                    "type": "integer",
+                    "format": "int32"
+                  },
+                  "VehicleDetails.FuelType": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Gearbox": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.BodyType": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.DriveType": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.Color": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.VIN": {
+                    "type": "string"
+                  },
+                  "VehicleDetails.State": {
+                    "type": "string"
+                  },
+                  "PartDetails.PartName": {
+                    "type": "string"
+                  },
+                  "PartDetails.PartNumber": {
+                    "type": "string"
+                  },
+                  "PartDetails.Compatibility": {
+                    "type": "string"
+                  },
+                  "PartDetails.State": {
+                    "type": "string"
+                  },
+                  "Photos": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "encoding": {
+                "Title": {
+                  "style": "form"
+                },
+                "Description": {
+                  "style": "form"
+                },
+                "Price": {
+                  "style": "form"
+                },
+                "Category": {
+                  "style": "form"
+                },
+                "PhoneNumber": {
+                  "style": "form"
+                },
+                "ContactPreference": {
+                  "style": "form"
+                },
+                "Location": {
+                  "style": "form"
+                },
+                "Features": {
+                  "style": "form"
+                },
+                "VehicleDetails.Brand": {
+                  "style": "form"
+                },
+                "VehicleDetails.Model": {
+                  "style": "form"
+                },
+                "VehicleDetails.Generation": {
+                  "style": "form"
+                },
+                "VehicleDetails.Year": {
+                  "style": "form"
+                },
+                "VehicleDetails.Mileage": {
+                  "style": "form"
+                },
+                "VehicleDetails.EnginePower": {
+                  "style": "form"
+                },
+                "VehicleDetails.EngineCapacity": {
+                  "style": "form"
+                },
+                "VehicleDetails.FuelType": {
+                  "style": "form"
+                },
+                "VehicleDetails.Gearbox": {
+                  "style": "form"
+                },
+                "VehicleDetails.BodyType": {
+                  "style": "form"
+                },
+                "VehicleDetails.DriveType": {
+                  "style": "form"
+                },
+                "VehicleDetails.Color": {
+                  "style": "form"
+                },
+                "VehicleDetails.VIN": {
+                  "style": "form"
+                },
+                "VehicleDetails.State": {
+                  "style": "form"
+                },
+                "PartDetails.PartName": {
+                  "style": "form"
+                },
+                "PartDetails.PartNumber": {
+                  "style": "form"
+                },
+                "PartDetails.Compatibility": {
+                  "style": "form"
+                },
+                "PartDetails.State": {
+                  "style": "form"
+                },
+                "Photos": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
       }
     },
     "/api/Announcements/user/me/announcements": {

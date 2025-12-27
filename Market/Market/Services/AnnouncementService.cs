@@ -1,5 +1,4 @@
-﻿using Market.Constants;
-using Market.Data;
+﻿using Market.Data;
 using Market.DTOs;
 using Market.Interfaces;
 using Market.Models;
@@ -11,7 +10,7 @@ namespace Market.Services
     {
         private readonly AppDbContext _context;
         private readonly ISearchService _searchService;
-        private readonly IFileService _fileService; 
+        private readonly IFileService _fileService; // Wstrzyknięty serwis plików
 
         public AnnouncementService(AppDbContext context, ISearchService searchService, IFileService fileService)
         {
@@ -19,52 +18,86 @@ namespace Market.Services
             _searchService = searchService;
             _fileService = fileService;
         }
-
         public async Task<int> CreateAsync(CreateAnnouncementDto dto, int userId)
         {
             var announcement = new Announcement
             {
+                UserId = userId,
                 Title = dto.Title,
                 Description = dto.Description,
                 Price = dto.Price,
                 Category = dto.Category,
-                UserId = userId,
-                CreatedAt = DateTime.UtcNow,
-                ExpiresAt = DateTime.UtcNow.AddDays(30),
+                Location = dto.Location,
                 PhoneNumber = dto.PhoneNumber,
                 ContactPreference = dto.ContactPreference,
-                Location = dto.Location,
-                Features = dto.Features.Select(f => new AnnouncementFeature { FeatureName = f }).ToList(),
-                Photos = new List<AnnouncementPhoto>() 
+                CreatedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddDays(30),
+                IsActive = true,
+                PhotoUrl = null 
             };
+
+            if (dto.Category == "Pojazd" && dto.VehicleDetails != null)
+            {
+                announcement.VehicleDetails = new VehicleDetails
+                {
+                    Brand = dto.VehicleDetails.Brand,
+                    Model = dto.VehicleDetails.Model,
+                    Generation = dto.VehicleDetails.Generation,
+                    Year = dto.VehicleDetails.Year,
+                    Mileage = dto.VehicleDetails.Mileage,
+                    EnginePower = dto.VehicleDetails.EnginePower,
+                    EngineCapacity = dto.VehicleDetails.EngineCapacity,
+                    FuelType = dto.VehicleDetails.FuelType,
+                    Gearbox = dto.VehicleDetails.Gearbox,
+                    BodyType = dto.VehicleDetails.BodyType,
+                    DriveType = dto.VehicleDetails.DriveType,
+                    Color = dto.VehicleDetails.Color,
+                    VIN = dto.VehicleDetails.VIN,
+                    State = dto.VehicleDetails.State
+                };
+            }
+
+            if (dto.Category == "Część" && dto.PartDetails != null)
+            {
+                announcement.PartDetails = new PartDetails
+                {
+                    PartName = dto.PartDetails.PartName,
+                    PartNumber = dto.PartDetails.PartNumber,
+                    Compatibility = dto.PartDetails.Compatibility,
+                    State = dto.PartDetails.State
+                };
+            }
+
+            if (dto.Features != null)
+            {
+                foreach (var featureName in dto.Features)
+                {
+                    announcement.Features.Add(new AnnouncementFeature { FeatureName = featureName });
+                }
+            }
+
             if (dto.Photos != null && dto.Photos.Count > 0)
             {
+                bool isFirst = true;
                 foreach (var file in dto.Photos)
                 {
-                    if (file.Length > 0)
+                    string path = await _fileService.SaveFileAsync(file);
+
+                    var photo = new AnnouncementPhoto
                     {
-                        var photoUrl = await _fileService.SaveFileAsync(file);
-                        announcement.Photos.Add(new AnnouncementPhoto
-                        {
-                            PhotoUrl = photoUrl,
-                            IsMain = announcement.Photos.Count == 0
-                        });
+                        PhotoUrl = path,
+                        IsMain = isFirst 
+                    };
+                    announcement.Photos.Add(photo);
+
+                    if (isFirst)
+                    {
+                        announcement.PhotoUrl = path;
+                        isFirst = false;
                     }
                 }
             }
 
-            if (dto.Category == CategoryConstants.Vehicle && dto.VehicleDetails != null)
-            {
-                announcement.VehicleDetails = MapVehicleDetails(dto.VehicleDetails);
-            }
-            else if (dto.Category == CategoryConstants.Part && dto.PartDetails != null)
-            {
-                announcement.PartDetails = MapPartDetails(dto.PartDetails);
-            }
-            else
-            {
-                throw new ArgumentException("Nieprawidłowa kategoria lub brak szczegółów.");
-            }
             _context.Announcements.Add(announcement);
             await _context.SaveChangesAsync();
             await _searchService.IndexAnnouncementAsync(announcement);
@@ -72,50 +105,89 @@ namespace Market.Services
             return announcement.Id;
         }
 
-        public async Task<Announcement?> GetByIdAsync(int id)
+        public async Task<AnnouncementDto?> GetByIdAsync(int id)
         {
-            return await _context.Announcements
-                .Include(a => a.User)
-                .Include(a => a.VehicleDetails)
-                .Include(a => a.PartDetails)
-                .Include(a => a.Features)
-                .Include(a => a.Photos) 
-                .FirstOrDefaultAsync(a => a.Id == id);
-        }
+            var a = await _context.Announcements
+                .Include(x => x.User)
+                .Include(x => x.VehicleDetails)
+                .Include(x => x.PartDetails)
+                .Include(x => x.Features)
+                .Include(x => x.Photos) 
+                .FirstOrDefaultAsync(x => x.Id == id);
 
-        private VehicleDetails MapVehicleDetails(VehicleDetailsDto dto)
-        {
-            return new VehicleDetails
+            if (a == null) return null;
+
+            var dto = new AnnouncementDto
             {
-                Brand = dto.Brand,
-                Model = dto.Model,
-                Generation = dto.Generation,
-                Year = dto.Year,
-                Mileage = dto.Mileage,
-                EnginePower = dto.EnginePower,
-                EngineCapacity = dto.EngineCapacity,
-                FuelType = dto.FuelType,
-                Gearbox = dto.Gearbox,
-                BodyType = dto.BodyType,
-                DriveType = dto.DriveType,
-                Color = dto.Color,
-                VIN = dto.VIN,
-                State = dto.State
-            };
-        }
+                Id = a.Id,
+                Title = a.Title,
+                Description = a.Description,
+                Price = a.Price,
+                Category = a.Category,
+                PhotoUrl = a.PhotoUrl,
+                Location = a.Location,
+                CreatedAt = a.CreatedAt,
+                ExpiresAt = a.ExpiresAt,
+                IsActive = a.IsActive,
+                PhoneNumber = a.PhoneNumber,
+                ContactPreference = a.ContactPreference,
 
-        private PartDetails MapPartDetails(PartDetailsDto dto)
-        {
-            return new PartDetails
+                Photos = a.Photos.Select(p => new AnnouncementPhotoDto
+                {
+                    Id = p.Id,
+                    PhotoUrl = p.PhotoUrl,
+                    IsMain = p.IsMain
+                }).ToList(),
+
+                Features = a.Features.Select(f => new AnnouncementFeatureDto
+                {
+                    Id = f.Id,
+                    FeatureName = f.FeatureName
+                }).ToList(),
+
+                User = new UserSummaryDto
+                {
+                    Username = a.User.Username,
+                    PhoneNumber = a.User.PhoneNumber,
+                    Email = a.User.Email
+                }
+            };
+
+            if (a.VehicleDetails != null)
             {
-                PartName = dto.PartName,
-                PartNumber = dto.PartNumber,
-                Compatibility = dto.Compatibility,
-                State = dto.State
-            };
-        }
+                dto.VehicleDetails = new VehicleDetailsDto
+                {
+                    Brand = a.VehicleDetails.Brand,
+                    Model = a.VehicleDetails.Model,
+                    Generation = a.VehicleDetails.Generation,
+                    Year = a.VehicleDetails.Year,
+                    Mileage = a.VehicleDetails.Mileage,
+                    EnginePower = a.VehicleDetails.EnginePower,
+                    EngineCapacity = a.VehicleDetails.EngineCapacity,
+                    FuelType = a.VehicleDetails.FuelType,
+                    Gearbox = a.VehicleDetails.Gearbox,
+                    BodyType = a.VehicleDetails.BodyType,
+                    DriveType = a.VehicleDetails.DriveType,
+                    Color = a.VehicleDetails.Color,
+                    VIN = a.VehicleDetails.VIN,
+                    State = a.VehicleDetails.State
+                };
+            }
 
-        public async Task<IEnumerable<AnnouncementListDto>> GetUserAnnouncementsAsync(int userId)
+            if (a.PartDetails != null)
+            {
+                dto.PartDetails = new PartDetailsDto
+                {
+                    PartName = a.PartDetails.PartName,
+                    PartNumber = a.PartDetails.PartNumber,
+                    Compatibility = a.PartDetails.Compatibility,
+                    State = a.PartDetails.State
+                };
+            }
+
+            return dto;
+        }
+        public async Task<List<AnnouncementListDto>> GetUserAnnouncementsAsync(int userId)
         {
             return await _context.Announcements
                 .Where(a => a.UserId == userId)
@@ -127,54 +199,164 @@ namespace Market.Services
                     Price = a.Price,
                     Category = a.Category,
                     Location = a.Location,
+                    PhotoUrl = a.PhotoUrl,
                     CreatedAt = a.CreatedAt,
                     ExpiresAt = a.ExpiresAt,
-                    IsActive = a.ExpiresAt >= DateTime.UtcNow
-                    // Opcjonalnie: ThumbnailUrl = a.Photos.FirstOrDefault(p => p.IsMain).PhotoUrl
+                    IsActive = a.IsActive
                 })
                 .ToListAsync();
         }
 
-        public async Task RenewAsync(int id, int userId)
+        public async Task<SearchResultDto> SearchAsync(SearchQueryDto dto)
         {
-            var announcement = await _context.Announcements.FindAsync(id);
-            if (announcement == null) throw new KeyNotFoundException("Ogłoszenie nie istnieje.");
-            if (announcement.UserId != userId) throw new UnauthorizedAccessException("Nie jesteś właścicielem.");
-
-            announcement.ExpiresAt = DateTime.UtcNow.AddDays(30);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task ActivateAsync(int id, int userId)
-        {
-            var announcement = await _context.Announcements.FindAsync(id);
-            if (announcement == null) throw new KeyNotFoundException("Ogłoszenie nie istnieje.");
-            if (announcement.UserId != userId) throw new UnauthorizedAccessException("Nie jesteś właścicielem.");
-
-            if (announcement.ExpiresAt < DateTime.UtcNow)
-                announcement.ExpiresAt = DateTime.UtcNow.AddDays(30);
-            else
-                announcement.ExpiresAt = announcement.ExpiresAt.AddDays(30);
-
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task<SearchResultDto> SearchAsync(SearchQueryDto query)
-        {
-            return await _searchService.SearchAsync(query);
+            return await _searchService.SearchAsync(dto);
         }
 
         public async Task<int> SyncAllToSearchAsync()
         {
-            var allAnnouncements = await _context.Announcements
+            var all = await _context.Announcements
                 .Include(a => a.VehicleDetails)
-                .Include(a => a.PartDetails)
-                // .Include(a => a.Photos) 
+                .Include(a => a.Photos)
                 .ToListAsync();
 
-            await _searchService.IndexManyAnnouncementsAsync(allAnnouncements);
+            await _searchService.IndexManyAnnouncementsAsync(all);
+            return all.Count;
+        }
 
-            return allAnnouncements.Count;
+        public async Task DeleteAsync(int id, int userId)
+        {
+            var announcement = await _context.Announcements
+                .Include(a => a.Photos) 
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (announcement == null) throw new KeyNotFoundException("Nie znaleziono ogłoszenia.");
+            if (announcement.UserId != userId) throw new UnauthorizedAccessException("Brak uprawnień.");
+            if (announcement.Photos != null)
+            {
+                foreach (var photo in announcement.Photos)
+                {
+                    _fileService.DeleteFile(photo.PhotoUrl);
+                }
+            }
+
+            _context.Announcements.Remove(announcement);
+            await _context.SaveChangesAsync();
+            await _searchService.RemoveAsync(id.ToString());
+        }
+
+        public async Task RenewAsync(int id, int userId)
+        {
+            var announcement = await _context.Announcements
+                .Include(a => a.VehicleDetails)
+                .Include(a => a.Photos) 
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (announcement == null) throw new KeyNotFoundException();
+            if (announcement.UserId != userId) throw new UnauthorizedAccessException();
+
+            var timeLeft = announcement.ExpiresAt - DateTime.UtcNow;
+
+            if (announcement.IsActive && announcement.ExpiresAt > DateTime.UtcNow && timeLeft.TotalDays > 7)
+            {
+                throw new InvalidOperationException("Ogłoszenie można przedłużyć tylko, gdy zostanie mniej niż 7 dni.");
+            }
+
+            announcement.ExpiresAt = DateTime.UtcNow.AddDays(30);
+            announcement.IsActive = true;
+
+            await _context.SaveChangesAsync();
+            await _searchService.IndexAnnouncementAsync(announcement);
+        }
+
+        public async Task ActivateAsync(int id, int userId)
+        {
+            var announcement = await _context.Announcements
+                .Include(a => a.VehicleDetails)
+                .Include(a => a.Photos) 
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (announcement == null) throw new KeyNotFoundException();
+            if (announcement.UserId != userId) throw new UnauthorizedAccessException();
+
+            announcement.IsActive = true;
+            if (announcement.ExpiresAt < DateTime.UtcNow)
+            {
+                announcement.ExpiresAt = DateTime.UtcNow.AddDays(30);
+            }
+
+            await _context.SaveChangesAsync();
+            await _searchService.IndexAnnouncementAsync(announcement);
+        }
+
+        public async Task UpdateAsync(int id, CreateAnnouncementDto dto, int userId)
+        {
+            var announcement = await _context.Announcements
+                .Include(a => a.VehicleDetails)
+                .Include(a => a.PartDetails)
+                .Include(a => a.Photos)
+                .FirstOrDefaultAsync(a => a.Id == id);
+
+            if (announcement == null) throw new KeyNotFoundException();
+            if (announcement.UserId != userId) throw new UnauthorizedAccessException();
+            announcement.Title = dto.Title;
+            announcement.Description = dto.Description;
+            announcement.Price = dto.Price;
+            announcement.Category = dto.Category;
+            announcement.Location = dto.Location;
+            announcement.PhoneNumber = dto.PhoneNumber;
+            announcement.ContactPreference = dto.ContactPreference;
+            if (dto.Photos != null && dto.Photos.Count > 0)
+            {
+                foreach (var oldPhoto in announcement.Photos)
+                {
+                    _fileService.DeleteFile(oldPhoto.PhotoUrl);
+                }
+                announcement.Photos.Clear();
+                bool isFirst = true;
+                foreach (var file in dto.Photos)
+                {
+                    string path = await _fileService.SaveFileAsync(file);
+                    var photo = new AnnouncementPhoto { PhotoUrl = path, IsMain = isFirst };
+                    announcement.Photos.Add(photo);
+
+                    if (isFirst) { announcement.PhotoUrl = path; isFirst = false; }
+                }
+            }
+
+            if (dto.Category == "Pojazd" && dto.VehicleDetails != null)
+            {
+                if (announcement.VehicleDetails == null) announcement.VehicleDetails = new VehicleDetails();
+
+                var v = announcement.VehicleDetails;
+                v.Brand = dto.VehicleDetails.Brand;
+                v.Model = dto.VehicleDetails.Model;
+                v.Generation = dto.VehicleDetails.Generation;
+                v.Year = dto.VehicleDetails.Year;
+                v.Mileage = dto.VehicleDetails.Mileage;
+                v.EnginePower = dto.VehicleDetails.EnginePower;
+                v.EngineCapacity = dto.VehicleDetails.EngineCapacity;
+                v.FuelType = dto.VehicleDetails.FuelType;
+                v.Gearbox = dto.VehicleDetails.Gearbox;
+                v.BodyType = dto.VehicleDetails.BodyType;
+                v.DriveType = dto.VehicleDetails.DriveType;
+                v.Color = dto.VehicleDetails.Color;
+                v.VIN = dto.VehicleDetails.VIN;
+                v.State = dto.VehicleDetails.State;
+            }
+
+            if (dto.Category == "Część" && dto.PartDetails != null)
+            {
+                if (announcement.PartDetails == null) announcement.PartDetails = new PartDetails();
+
+                var p = announcement.PartDetails;
+                p.PartName = dto.PartDetails.PartName;
+                p.PartNumber = dto.PartDetails.PartNumber;
+                p.Compatibility = dto.PartDetails.Compatibility;
+                p.State = dto.PartDetails.State;
+            }
+
+            await _context.SaveChangesAsync();
+            await _searchService.IndexAnnouncementAsync(announcement);
         }
     }
 }

@@ -67,10 +67,20 @@ namespace Market.Controllers
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
                 await _announcementService.RenewAsync(id, userId);
-                return Ok(new { Message = "Ogłoszenie przedłużone." });
+                return Ok(new { Message = "Ogłoszenie przedłużone o 30 dni." });
             }
-            catch (KeyNotFoundException) { return NotFound(); }
-            catch (UnauthorizedAccessException) { return Forbid(); }
+            catch (InvalidOperationException ex) 
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
         }
 
         [HttpPost("{id}/activate")]
@@ -106,6 +116,45 @@ namespace Market.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Błąd synchronizacji: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                await _announcementService.DeleteAsync(id, userId);
+                return NoContent();
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound("Nie znaleziono ogłoszenia.");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid(); 
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromForm] CreateAnnouncementDto dto)
+        {
+
+            try
+            {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+                await _announcementService.UpdateAsync(id, dto, userId);
+                return Ok(new { Message = "Ogłoszenie zaktualizowane." });
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
             }
         }
     }

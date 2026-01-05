@@ -12,6 +12,8 @@ namespace Market.Data
         public DbSet<VehicleDetails> VehicleDetails { get; set; }
         public DbSet<PartDetails> PartDetails { get; set; }
         public DbSet<AnnouncementFeature> AnnouncementFeatures { get; set; }
+        public DbSet<SystemLog> SystemLogs { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

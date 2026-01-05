@@ -2,6 +2,7 @@
 using Market.DTOs;
 using Market.Interfaces;
 using Market.Models;
+using Market.Services; 
 using Microsoft.EntityFrameworkCore;
 
 namespace Market.Services
@@ -10,16 +11,37 @@ namespace Market.Services
     {
         private readonly AppDbContext _context;
         private readonly ISearchService _searchService;
-        private readonly IFileService _fileService; // Wstrzyknięty serwis plików
+        private readonly IFileService _fileService;
+        private readonly IAiModerationService _aiModerationService;
+        private readonly ILogService _logService; 
 
-        public AnnouncementService(AppDbContext context, ISearchService searchService, IFileService fileService)
+        public AnnouncementService(
+            AppDbContext context,
+            ISearchService searchService,
+            IFileService fileService,
+            IAiModerationService aiModerationService,
+            ILogService logService) 
         {
             _context = context;
             _searchService = searchService;
             _fileService = fileService;
+            _aiModerationService = aiModerationService;
+            _logService = logService;
         }
+
         public async Task<int> CreateAsync(CreateAnnouncementDto dto, int userId)
         {
+            var user = await _context.Users.FindAsync(userId);
+            string username = user?.Username ?? "Unknown";
+
+            var moderation = await _aiModerationService.CheckContentAsync(dto.Title, dto.Description, dto.Price);
+
+            if (!moderation.IsSafe)
+            {
+                await _logService.LogAsync("AI_BLOCK", $"Zablokowano: {dto.Title}. Powód: {moderation.Reason}", username);
+                throw new InvalidOperationException($"Ogłoszenie zablokowane. Powód: {moderation.Reason}");
+            }
+
             var announcement = new Announcement
             {
                 UserId = userId,
@@ -33,7 +55,7 @@ namespace Market.Services
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = DateTime.UtcNow.AddDays(30),
                 IsActive = true,
-                PhotoUrl = null 
+                PhotoUrl = null
             };
 
             if (dto.Category == "Pojazd" && dto.VehicleDetails != null)
@@ -86,7 +108,7 @@ namespace Market.Services
                     var photo = new AnnouncementPhoto
                     {
                         PhotoUrl = path,
-                        IsMain = isFirst 
+                        IsMain = isFirst
                     };
                     announcement.Photos.Add(photo);
 
@@ -102,6 +124,8 @@ namespace Market.Services
             await _context.SaveChangesAsync();
             await _searchService.IndexAnnouncementAsync(announcement);
 
+            await _logService.LogAsync("NEW_ANNOUNCEMENT", $"Dodano ogłoszenie ID: {announcement.Id}: {dto.Title}", username);
+
             return announcement.Id;
         }
 
@@ -112,7 +136,7 @@ namespace Market.Services
                 .Include(x => x.VehicleDetails)
                 .Include(x => x.PartDetails)
                 .Include(x => x.Features)
-                .Include(x => x.Photos) 
+                .Include(x => x.Photos)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (a == null) return null;
@@ -187,6 +211,7 @@ namespace Market.Services
 
             return dto;
         }
+
         public async Task<List<AnnouncementListDto>> GetUserAnnouncementsAsync(int userId)
         {
             return await _context.Announcements
@@ -226,11 +251,12 @@ namespace Market.Services
         public async Task DeleteAsync(int id, int userId)
         {
             var announcement = await _context.Announcements
-                .Include(a => a.Photos) 
+                .Include(a => a.Photos)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (announcement == null) throw new KeyNotFoundException("Nie znaleziono ogłoszenia.");
             if (announcement.UserId != userId) throw new UnauthorizedAccessException("Brak uprawnień.");
+
             if (announcement.Photos != null)
             {
                 foreach (var photo in announcement.Photos)
@@ -242,13 +268,15 @@ namespace Market.Services
             _context.Announcements.Remove(announcement);
             await _context.SaveChangesAsync();
             await _searchService.RemoveAsync(id.ToString());
+
+            await _logService.LogAsync("DELETE_ANNOUNCEMENT", $"Usunięto ogłoszenie ID: {id}", userId.ToString());
         }
 
         public async Task RenewAsync(int id, int userId)
         {
             var announcement = await _context.Announcements
                 .Include(a => a.VehicleDetails)
-                .Include(a => a.Photos) 
+                .Include(a => a.Photos)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (announcement == null) throw new KeyNotFoundException();
@@ -272,7 +300,7 @@ namespace Market.Services
         {
             var announcement = await _context.Announcements
                 .Include(a => a.VehicleDetails)
-                .Include(a => a.Photos) 
+                .Include(a => a.Photos)
                 .FirstOrDefaultAsync(a => a.Id == id);
 
             if (announcement == null) throw new KeyNotFoundException();
@@ -290,6 +318,13 @@ namespace Market.Services
 
         public async Task UpdateAsync(int id, CreateAnnouncementDto dto, int userId)
         {
+            var moderation = await _aiModerationService.CheckContentAsync(dto.Title, dto.Description, dto.Price);
+            if (!moderation.IsSafe)
+            {
+                await _logService.LogAsync("AI_BLOCK_EDIT", $"Zablokowano edycję ID {id}: {dto.Title}. Powód: {moderation.Reason}", userId.ToString());
+                throw new InvalidOperationException($"Edycja zablokowana przez AI. Powód: {moderation.Reason}");
+            }
+
             var announcement = await _context.Announcements
                 .Include(a => a.VehicleDetails)
                 .Include(a => a.PartDetails)
@@ -298,6 +333,7 @@ namespace Market.Services
 
             if (announcement == null) throw new KeyNotFoundException();
             if (announcement.UserId != userId) throw new UnauthorizedAccessException();
+
             announcement.Title = dto.Title;
             announcement.Description = dto.Description;
             announcement.Price = dto.Price;
@@ -305,6 +341,7 @@ namespace Market.Services
             announcement.Location = dto.Location;
             announcement.PhoneNumber = dto.PhoneNumber;
             announcement.ContactPreference = dto.ContactPreference;
+
             if (dto.Photos != null && dto.Photos.Count > 0)
             {
                 foreach (var oldPhoto in announcement.Photos)
@@ -357,6 +394,8 @@ namespace Market.Services
 
             await _context.SaveChangesAsync();
             await _searchService.IndexAnnouncementAsync(announcement);
+
+            await _logService.LogAsync("UPDATE_ANNOUNCEMENT", $"Zaktualizowano ogłoszenie ID: {id}", userId.ToString());
         }
     }
 }

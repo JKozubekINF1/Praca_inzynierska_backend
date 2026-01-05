@@ -33,6 +33,10 @@ namespace Market.Controllers
 
                 return CreatedAtAction(nameof(GetAnnouncement), new { id = id }, new { Message = "Ogłoszenie dodane pomyślnie.", AnnouncementId = id });
             }
+            catch (InvalidOperationException ex)
+            { 
+                return BadRequest(new { Message = ex.Message });
+            }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
@@ -69,7 +73,7 @@ namespace Market.Controllers
                 await _announcementService.RenewAsync(id, userId);
                 return Ok(new { Message = "Ogłoszenie przedłużone o 30 dni." });
             }
-            catch (InvalidOperationException ex) 
+            catch (InvalidOperationException ex)
             {
                 return BadRequest(new { Message = ex.Message });
             }
@@ -134,19 +138,23 @@ namespace Market.Controllers
             }
             catch (UnauthorizedAccessException)
             {
-                return Forbid(); 
+                return Forbid();
             }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] CreateAnnouncementDto dto)
         {
-
             try
             {
                 var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
                 await _announcementService.UpdateAsync(id, dto, userId);
                 return Ok(new { Message = "Ogłoszenie zaktualizowane." });
+            }
+            catch (InvalidOperationException ex)
+            {
+               
+                return BadRequest(new { Message = ex.Message });
             }
             catch (KeyNotFoundException)
             {

@@ -135,7 +135,6 @@ C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debu
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\Market.csproj.Up2Date
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\Market.dll
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\refint\Market.dll
@@ -143,3 +142,4 @@ C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debu
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\Market.genruntimeconfig.cache
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\ref\Market.dll
 C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\bin\Debug\net8.0\Market.staticwebassets.runtime.json
+C:\Users\tytaj\Documents\GitHub\Praca_inzynierska_backend\Market\Market\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

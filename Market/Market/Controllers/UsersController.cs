@@ -1,5 +1,6 @@
 ﻿using Market.Data;
 using Market.Models;
+using Market.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -71,14 +72,16 @@ namespace Market.Controllers
             {
                 errors.Add("email", new[] { "Poprawny adres email jest wymagany." });
             }
-            if (_context.Users.Any(u => u.Email == dto.Email && u.Id != int.Parse(userId)))
+
+            if (await _context.Users.AnyAsync(u => u.Email == dto.Email && u.Id != int.Parse(userId)))
             {
                 errors.Add("email", new[] { "Email jest już używany przez innego użytkownika." });
             }
-            if (_context.Users.Any(u => u.Username == dto.Username && u.Id != int.Parse(userId)))
+            if (await _context.Users.AnyAsync(u => u.Username == dto.Username && u.Id != int.Parse(userId)))
             {
                 errors.Add("username", new[] { "Nazwa użytkownika jest już używana." });
             }
+
             if (!string.IsNullOrEmpty(dto.Name) && dto.Name.Length > 100)
             {
                 errors.Add("name", new[] { "Imię nie może przekraczać 100 znaków." });
@@ -87,13 +90,13 @@ namespace Market.Controllers
             {
                 errors.Add("surname", new[] { "Nazwisko nie może przekraczać 100 znaków." });
             }
-            if (!string.IsNullOrEmpty(dto.PhoneNumber) && dto.PhoneNumber.Length > 15)
+            if (!string.IsNullOrEmpty(dto.PhoneNumber))
             {
-                errors.Add("phoneNumber", new[] { "Numer telefonu nie może przekraczać 15 znaków." });
-            }
-            if (!string.IsNullOrEmpty(dto.PhoneNumber) && !Regex.IsMatch(dto.PhoneNumber, @"^\+?\d{9,15}$"))
-            {
-                errors.Add("phoneNumber", new[] { "Podaj poprawny numer telefonu (9-15 cyfr, może zaczynać się od '+')." });
+                if (dto.PhoneNumber.Length > 15)
+                    errors.Add("phoneNumber", new[] { "Numer telefonu nie może przekraczać 15 znaków." });
+
+                if (!Regex.IsMatch(dto.PhoneNumber, @"^\+?\d{9,15}$"))
+                    errors.Add("phoneNumber", new[] { "Podaj poprawny numer telefonu (9-15 cyfr, może zaczynać się od '+')." });
             }
 
             if (errors.Count > 0)
@@ -176,8 +179,11 @@ namespace Market.Controllers
                     a.Title,
                     a.Price,
                     a.Category,
-                    a.CreatedAt
+                    a.CreatedAt,
+                    a.IsActive,
+                    a.ExpiresAt
                 })
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
 
             return Ok(announcements);

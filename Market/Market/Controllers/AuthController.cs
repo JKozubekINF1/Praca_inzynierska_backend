@@ -1,12 +1,10 @@
-﻿using Market.Data;
-using Market.Models;
+﻿using Market.DTOs;
+using Market.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using BCrypt.Net;
-using System.Text.RegularExpressions;
 
 namespace Market.Controllers
 {
@@ -14,64 +12,58 @@ namespace Market.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
 
-        public AuthController(AppDbContext context, IConfiguration configuration)
+        public AuthController(IAuthService authService, IConfiguration configuration)
         {
-            _context = context;
+            _authService = authService;
             _configuration = configuration;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            if (string.IsNullOrEmpty(dto.Password) || dto.Password.Length < 8)
+            var result = await _authService.RegisterAsync(dto);
+
+            if (!result.Success)
             {
-                return BadRequest("Hasło musi mieć co najmniej 8 znaków.");
-            }
-            string passwordPattern = @"^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};:'"",.<>?]).+$";
-            if (!Regex.IsMatch(dto.Password, passwordPattern))
-            {
-                return BadRequest("Hasło musi zawierać co najmniej jedną wielką literę i jeden znak specjalny (np. !@#$%^&*()_+-=[]{};:'\",.<>?).");
+                return BadRequest(new { Message = result.Message });
             }
 
-            if (_context.Users.Any(u => u.Username == dto.Username || u.Email == dto.Email))
-            {
-                return BadRequest("Użytkownik o podanej nazwie lub emailu już istnieje.");
-            }
-
-            var user = new User
-            {
-                Username = dto.Username,
-                Email = dto.Email,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok("Rejestracja zakończona sukcesem.");
+            return Ok(new { Message = result.Message });
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginDto dto)
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == dto.Username);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-                return Unauthorized("Nieprawidłowa nazwa użytkownika lub hasło.");
-
-            var token = GenerateJwtToken(user);
-
-            Response.Cookies.Append("AuthToken", token, new CookieOptions
+            try
             {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTimeOffset.UtcNow.AddHours(1)
-            });
+                var token = await _authService.LoginAsync(dto);
 
-            return Ok("Zalogowano pomyślnie.");
+                if (token == null)
+                {
+                    return Unauthorized(new { Message = "Nieprawidłowa nazwa użytkownika lub hasło." });
+                }
+
+                Response.Cookies.Append("AuthToken", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddHours(1)
+                });
+
+                return Ok(new { Message = "Zalogowano pomyślnie." });
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, new { Message = ex.Message });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, new { Message = "Wystąpił błąd serwera." });
+            }
         }
 
         [HttpPost("logout")]
@@ -84,33 +76,7 @@ namespace Market.Controllers
                 SameSite = SameSiteMode.Strict,
                 Expires = DateTimeOffset.UtcNow.AddDays(-1)
             });
-            return Ok("Wylogowano pomyślnie.");
-        }
-
-        private string GenerateJwtToken(User user)
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username!),
-                new Claim(ClaimTypes.Email, user.Email!)
-            };
-
-            var key = _configuration["Jwt:Key"];
-            if (string.IsNullOrEmpty(key))
-                throw new InvalidOperationException("Brak klucza JWT w konfiguracji.");
-
-            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var creds = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: creds);
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Ok(new { Message = "Wylogowano pomyślnie." });
         }
 
         [HttpGet("verify")]
@@ -119,7 +85,7 @@ namespace Market.Controllers
             var token = Request.Cookies["AuthToken"];
             if (string.IsNullOrEmpty(token))
             {
-                return Unauthorized("Brak tokenu.");
+                return Unauthorized(new { Message = "Brak tokenu." });
             }
 
             try
@@ -127,7 +93,7 @@ namespace Market.Controllers
                 var key = _configuration["Jwt:Key"];
                 var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
                 var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
@@ -138,25 +104,21 @@ namespace Market.Controllers
                     IssuerSigningKey = symmetricKey
                 }, out SecurityToken validatedToken);
 
-                return Ok("Token ważny.");
+                var role = principal.FindFirst(ClaimTypes.Role)?.Value ?? "User";
+                var username = principal.Identity?.Name;
+                var userIdString = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                int.TryParse(userIdString, out int userId);
+
+                return Ok(new
+                {
+                    Message = "Token ważny",
+                    User = new { Id = userId, Username = username, Role = role }
+                });
             }
             catch
             {
-                return Unauthorized("Nieprawidłowy lub wygasły token.");
+                return Unauthorized(new { Message = "Nieprawidłowy lub wygasły token." });
             }
         }
-    }
-
-    public class RegisterDto
-    {
-        public required string Username { get; set; }
-        public required string Email { get; set; }
-        public required string Password { get; set; }
-    }
-
-    public class LoginDto
-    {
-        public required string Username { get; set; }
-        public required string Password { get; set; }
     }
 }

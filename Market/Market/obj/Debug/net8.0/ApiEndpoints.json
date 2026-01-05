@@ -1,5 +1,141 @@
 [
   {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "GetAllAnnouncements",
+    "RelativePath": "api/Admin/announcements",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "DeleteAnnouncement",
+    "RelativePath": "api/Admin/announcements/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "GetLogs",
+    "RelativePath": "api/Admin/logs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "GetStats",
+    "RelativePath": "api/Admin/stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Admin/users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Search",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "DeleteUser",
+    "RelativePath": "api/Admin/users/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "GetUserById",
+    "RelativePath": "api/Admin/users/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AdminController",
+    "Method": "ToggleBan",
+    "RelativePath": "api/Admin/users/{id}/toggle-ban",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Market.Controllers.AnnouncementsController",
     "Method": "CreateAnnouncement",
     "RelativePath": "api/Announcements",
@@ -451,7 +587,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Market.Controllers.LoginDto",
+        "Type": "Market.DTOs.LoginDto",
         "IsRequired": true
       }
     ],
@@ -477,7 +613,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Market.Controllers.RegisterDto",
+        "Type": "Market.DTOs.RegisterDto",
         "IsRequired": true
       }
     ],
@@ -487,6 +623,16 @@
     "ContainingType": "Market.Controllers.AuthController",
     "Method": "Verify",
     "RelativePath": "api/Auth/verify",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.DebugController",
+    "Method": "TestOpenAiConnection",
+    "RelativePath": "api/Debug/test-openai",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -513,7 +659,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Market.Models.UserDto",
+        "Type": "Market.DTOs.UserDto",
         "IsRequired": true
       }
     ],
@@ -539,7 +685,7 @@
     "Parameters": [
       {
         "Name": "dto",
-        "Type": "Market.Models.ChangePasswordDto",
+        "Type": "Market.DTOs.ChangePasswordDto",
         "IsRequired": true
       }
     ],

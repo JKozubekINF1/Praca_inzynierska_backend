@@ -9,6 +9,8 @@
         public string Category { get; set; } = string.Empty;
         public string? PhotoUrl { get; set; }
         public string Location { get; set; } = string.Empty;
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime ExpiresAt { get; set; }
         public bool IsActive { get; set; }

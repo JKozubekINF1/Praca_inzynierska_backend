@@ -226,6 +226,12 @@
                   "Location": {
                     "type": "string"
                   },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
+                  },
                   "Features": {
                     "type": "array",
                     "items": {
@@ -319,6 +325,12 @@
                   "style": "form"
                 },
                 "Location": {
+                  "style": "form"
+                },
+                "Latitude": {
+                  "style": "form"
+                },
+                "Longitude": {
                   "style": "form"
                 },
                 "Features": {
@@ -478,6 +490,12 @@
                   "Location": {
                     "type": "string"
                   },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
+                  },
                   "Features": {
                     "type": "array",
                     "items": {
@@ -571,6 +589,12 @@
                   "style": "form"
                 },
                 "Location": {
+                  "style": "form"
+                },
+                "Latitude": {
+                  "style": "form"
+                },
+                "Longitude": {
                   "style": "form"
                 },
                 "Features": {
@@ -894,6 +918,53 @@
       "get": {
         "tags": [
           "Debug"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Favorites/{announcementId}": {
+      "post": {
+        "tags": [
+          "Favorites"
+        ],
+        "parameters": [
+          {
+            "name": "announcementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Favorites": {
+      "get": {
+        "tags": [
+          "Favorites"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/Favorites/ids": {
+      "get": {
+        "tags": [
+          "Favorites"
         ],
         "responses": {
           "200": {

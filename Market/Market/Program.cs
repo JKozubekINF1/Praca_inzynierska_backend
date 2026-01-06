@@ -36,6 +36,7 @@ builder.Services.AddScoped<Market.Services.ILogService, Market.Services.LogServi
 builder.Services.AddHttpClient<RecaptchaService>(); 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<UserSeeder>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 // --- 4. ALGOLIA ---
 var algoliaSettings = builder.Configuration.GetSection("Algolia");

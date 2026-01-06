@@ -57,7 +57,6 @@ namespace Market.Services
                 return $"WYJĄTEK SYSTEMOWY: {ex.Message}";
             }
         }
-        // ----------------------------------
 
         public async Task<(bool IsSafe, string Reason)> CheckContentAsync(string title, string description, decimal price)
         {

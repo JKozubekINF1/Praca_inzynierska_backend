@@ -2,8 +2,8 @@
 using Market.DTOs;
 using Market.Interfaces;
 using Market.Models;
-using Market.Services; 
 using Microsoft.EntityFrameworkCore;
+using System.Globalization; 
 
 namespace Market.Services
 {
@@ -13,14 +13,14 @@ namespace Market.Services
         private readonly ISearchService _searchService;
         private readonly IFileService _fileService;
         private readonly IAiModerationService _aiModerationService;
-        private readonly ILogService _logService; 
+        private readonly ILogService _logService;
 
         public AnnouncementService(
             AppDbContext context,
             ISearchService searchService,
             IFileService fileService,
             IAiModerationService aiModerationService,
-            ILogService logService) 
+            ILogService logService)
         {
             _context = context;
             _searchService = searchService;
@@ -28,6 +28,17 @@ namespace Market.Services
             _aiModerationService = aiModerationService;
             _logService = logService;
         }
+
+        private double? ParseCoordinate(string? value)
+        {
+            if (string.IsNullOrEmpty(value)) return null;
+            if (double.TryParse(value.Replace(',', '.'), NumberStyles.Any, CultureInfo.InvariantCulture, out double result))
+            {
+                return result;
+            }
+            return null;
+        }
+
 
         public async Task<int> CreateAsync(CreateAnnouncementDto dto, int userId)
         {
@@ -50,6 +61,8 @@ namespace Market.Services
                 Price = dto.Price,
                 Category = dto.Category,
                 Location = dto.Location,
+                Latitude = ParseCoordinate(dto.Latitude),
+                Longitude = ParseCoordinate(dto.Longitude),
                 PhoneNumber = dto.PhoneNumber,
                 ContactPreference = dto.ContactPreference,
                 CreatedAt = DateTime.UtcNow,
@@ -150,6 +163,8 @@ namespace Market.Services
                 Category = a.Category,
                 PhotoUrl = a.PhotoUrl,
                 Location = a.Location,
+                Latitude = a.Latitude,
+                Longitude = a.Longitude,
                 CreatedAt = a.CreatedAt,
                 ExpiresAt = a.ExpiresAt,
                 IsActive = a.IsActive,
@@ -339,6 +354,8 @@ namespace Market.Services
             announcement.Price = dto.Price;
             announcement.Category = dto.Category;
             announcement.Location = dto.Location;
+            announcement.Latitude = ParseCoordinate(dto.Latitude);
+            announcement.Longitude = ParseCoordinate(dto.Longitude);
             announcement.PhoneNumber = dto.PhoneNumber;
             announcement.ContactPreference = dto.ContactPreference;
 

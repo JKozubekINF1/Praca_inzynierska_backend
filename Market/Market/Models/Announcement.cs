@@ -12,12 +12,14 @@ namespace Market.Models
         public string PhoneNumber { get; set; } = string.Empty;
         public string ContactPreference { get; set; } = "Telefon";
         public string Location { get; set; } = string.Empty;
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
         public int UserId { get; set; }
         public User? User { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime ExpiresAt { get; set; }
-        public bool IsActive { get; set; }     
-        public string? PhotoUrl { get; set; }   
+        public bool IsActive { get; set; }
+        public string? PhotoUrl { get; set; }
         public VehicleDetails? VehicleDetails { get; set; }
         public PartDetails? PartDetails { get; set; }
         public ICollection<AnnouncementFeature> Features { get; set; } = new List<AnnouncementFeature>();

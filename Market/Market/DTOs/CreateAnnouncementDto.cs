@@ -7,15 +7,15 @@ namespace Market.DTOs
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public string Category { get; set; } 
+        public string Category { get; set; }
         public string PhoneNumber { get; set; }
         public string ContactPreference { get; set; }
         public string Location { get; set; }
+        public string? Latitude { get; set; }
+        public string? Longitude { get; set; }
         public List<string> Features { get; set; } = new();
-
         public VehicleDetailsDto? VehicleDetails { get; set; }
         public PartDetailsDto? PartDetails { get; set; }
-
         public List<IFormFile>? Photos { get; set; }
     }
 

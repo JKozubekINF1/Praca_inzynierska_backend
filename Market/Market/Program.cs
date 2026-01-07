@@ -37,6 +37,8 @@ builder.Services.AddHttpClient<RecaptchaService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<UserSeeder>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+builder.Services.AddScoped<Market.Interfaces.IAdminService, Market.Services.AdminService>();
+builder.Services.AddScoped<Market.Interfaces.IUserService, Market.Services.UserService>();
 
 // --- 4. ALGOLIA ---
 var algoliaSettings = builder.Configuration.GetSection("Algolia");
@@ -152,7 +154,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "Market API V1");
     });
 }
-
+app.UseMiddleware<Market.Middleware.ErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

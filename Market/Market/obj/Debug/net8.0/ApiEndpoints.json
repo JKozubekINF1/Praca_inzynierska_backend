@@ -530,12 +530,17 @@
         "IsRequired": false
       },
       {
-        "Name": "Brand",
-        "Type": "System.String",
+        "Name": "Page",
+        "Type": "System.Int32",
         "IsRequired": false
       },
       {
-        "Name": "Model",
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Category",
         "Type": "System.String",
         "IsRequired": false
       },
@@ -550,6 +555,31 @@
         "IsRequired": false
       },
       {
+        "Name": "Location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "State",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Brand",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Model",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Generation",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
         "Name": "MinYear",
         "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
         "IsRequired": false
@@ -560,18 +590,58 @@
         "IsRequired": false
       },
       {
-        "Name": "Category",
+        "Name": "MinMileage",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MaxMileage",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MinPower",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "MaxPower",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "FuelType",
         "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "Page",
-        "Type": "System.Int32",
+        "Name": "Gearbox",
+        "Type": "System.String",
         "IsRequired": false
       },
       {
-        "Name": "PageSize",
-        "Type": "System.Int32",
+        "Name": "BodyType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DriveType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PartNumber",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Compatibility",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "SortBy",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],

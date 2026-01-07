@@ -3,7 +3,7 @@ using Market.DTOs;
 using Market.Interfaces;
 using Market.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization; 
+using System.Globalization;
 
 namespace Market.Services
 {
@@ -38,7 +38,6 @@ namespace Market.Services
             }
             return null;
         }
-
 
         public async Task<int> CreateAsync(CreateAnnouncementDto dto, int userId)
         {
@@ -117,19 +116,10 @@ namespace Market.Services
                 foreach (var file in dto.Photos)
                 {
                     string path = await _fileService.SaveFileAsync(file);
-
-                    var photo = new AnnouncementPhoto
-                    {
-                        PhotoUrl = path,
-                        IsMain = isFirst
-                    };
+                    var photo = new AnnouncementPhoto { PhotoUrl = path, IsMain = isFirst };
                     announcement.Photos.Add(photo);
 
-                    if (isFirst)
-                    {
-                        announcement.PhotoUrl = path;
-                        isFirst = false;
-                    }
+                    if (isFirst) { announcement.PhotoUrl = path; isFirst = false; }
                 }
             }
 
@@ -254,12 +244,16 @@ namespace Market.Services
 
         public async Task<int> SyncAllToSearchAsync()
         {
+            await _searchService.ConfigureIndexSettingsAsync();
+
             var all = await _context.Announcements
                 .Include(a => a.VehicleDetails)
+                .Include(a => a.PartDetails) 
                 .Include(a => a.Photos)
                 .ToListAsync();
 
             await _searchService.IndexManyAnnouncementsAsync(all);
+
             return all.Count;
         }
 
@@ -380,7 +374,6 @@ namespace Market.Services
             if (dto.Category == "Pojazd" && dto.VehicleDetails != null)
             {
                 if (announcement.VehicleDetails == null) announcement.VehicleDetails = new VehicleDetails();
-
                 var v = announcement.VehicleDetails;
                 v.Brand = dto.VehicleDetails.Brand;
                 v.Model = dto.VehicleDetails.Model;
@@ -401,7 +394,6 @@ namespace Market.Services
             if (dto.Category == "Część" && dto.PartDetails != null)
             {
                 if (announcement.PartDetails == null) announcement.PartDetails = new PartDetails();
-
                 var p = announcement.PartDetails;
                 p.PartName = dto.PartDetails.PartName;
                 p.PartNumber = dto.PartDetails.PartNumber;
@@ -411,7 +403,6 @@ namespace Market.Services
 
             await _context.SaveChangesAsync();
             await _searchService.IndexAnnouncementAsync(announcement);
-
             await _logService.LogAsync("UPDATE_ANNOUNCEMENT", $"Zaktualizowano ogłoszenie ID: {id}", userId.ToString());
         }
     }

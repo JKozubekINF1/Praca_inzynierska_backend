@@ -1,6 +1,7 @@
 ﻿using Market.Data;
 using Market.DTOs;
 using Market.Models;
+using Market.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,7 +29,7 @@ namespace Market.Services
         {
             var isCaptchaValid = await _recaptchaService.VerifyTokenAsync(dto.RecaptchaToken);
             if (!isCaptchaValid)
-                return (false, "Weryfikacja Captcha nie powiodła się. Jesteś robotem?");
+                return (false, "Weryfikacja Captcha nie powiodła się.");
 
             if (string.IsNullOrEmpty(dto.Password) || dto.Password.Length < 8)
                 return (false, "Hasło musi mieć co najmniej 8 znaków.");
@@ -57,25 +58,54 @@ namespace Market.Services
         public async Task<string?> LoginAsync(LoginDto dto)
         {
             var isCaptchaValid = await _recaptchaService.VerifyTokenAsync(dto.RecaptchaToken);
-            if (!isCaptchaValid)
-            {
-                return null;
-            }
+            if (!isCaptchaValid) return null;
 
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
                 return null;
 
-
             if (user.IsBanned)
-            {
-                
                 throw new UnauthorizedAccessException("Twoje konto zostało zablokowane. Skontaktuj się z administracją.");
-            }
-            
 
             return GenerateJwtToken(user);
+        }
+
+        public VerifyResultDto Verify(string token)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
+            try
+            {
+                tokenHandler.ValidateToken(token, new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = true,
+                    ValidIssuer = _configuration["Jwt:Issuer"],
+                    ValidateAudience = true,
+                    ValidAudience = _configuration["Jwt:Audience"],
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
+                }, out SecurityToken validatedToken);
+
+                var jwtToken = (JwtSecurityToken)validatedToken;
+                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value);
+                var username = jwtToken.Claims.First(x => x.Type == ClaimTypes.Name).Value;
+                var role = jwtToken.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value ?? "User";
+
+                return new VerifyResultDto
+                {
+                    Id = userId,
+                    Username = username,
+                    Role = role
+                };
+            }
+            catch
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
         }
 
         private string GenerateJwtToken(User user)
@@ -89,9 +119,6 @@ namespace Market.Services
             };
 
             var key = _configuration["Jwt:Key"];
-            if (string.IsNullOrEmpty(key))
-                throw new InvalidOperationException("Brak klucza JWT w konfiguracji.");
-
             var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
             var creds = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
 

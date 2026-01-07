@@ -1,10 +1,8 @@
 ﻿using Market.DTOs;
 using Market.Services;
+using Market.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Market.Controllers
 {
@@ -13,12 +11,10 @@ namespace Market.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService, IConfiguration configuration)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            _configuration = configuration;
         }
 
         [HttpPost("register")]
@@ -37,45 +33,22 @@ namespace Market.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            try
-            {
-                var token = await _authService.LoginAsync(dto);
+            var token = await _authService.LoginAsync(dto);
 
-                if (token == null)
-                {
-                    return Unauthorized(new { Message = "Nieprawidłowa nazwa użytkownika lub hasło." });
-                }
-
-                Response.Cookies.Append("AuthToken", token, new CookieOptions
-                {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
-                    Expires = DateTimeOffset.UtcNow.AddHours(1)
-                });
-
-                return Ok(new { Message = "Zalogowano pomyślnie." });
-            }
-            catch (UnauthorizedAccessException ex)
+            if (token == null)
             {
-                return StatusCode(403, new { Message = ex.Message });
+                return Unauthorized(new { Message = "Nieprawidłowa nazwa użytkownika lub hasło." });
             }
-            catch (Exception)
-            {
-                return StatusCode(500, new { Message = "Wystąpił błąd serwera." });
-            }
+
+            SetTokenCookie(token);
+
+            return Ok(new { Message = "Zalogowano pomyślnie." });
         }
 
         [HttpPost("logout")]
         public IActionResult Logout()
         {
-            Response.Cookies.Append("AuthToken", "", new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = true,
-                SameSite = SameSiteMode.Strict,
-                Expires = DateTimeOffset.UtcNow.AddDays(-1)
-            });
+            Response.Cookies.Delete("AuthToken");
             return Ok(new { Message = "Wylogowano pomyślnie." });
         }
 
@@ -90,35 +63,25 @@ namespace Market.Controllers
 
             try
             {
-                var key = _configuration["Jwt:Key"];
-                var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var principal = tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = _configuration["Jwt:Issuer"],
-                    ValidAudience = _configuration["Jwt:Audience"],
-                    IssuerSigningKey = symmetricKey
-                }, out SecurityToken validatedToken);
-
-                var role = principal.FindFirst(ClaimTypes.Role)?.Value ?? "User";
-                var username = principal.Identity?.Name;
-                var userIdString = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                int.TryParse(userIdString, out int userId);
-
-                return Ok(new
-                {
-                    Message = "Token ważny",
-                    User = new { Id = userId, Username = username, Role = role }
-                });
+                var userDto = _authService.Verify(token);
+                return Ok(new { Message = "Token ważny", User = userDto });
             }
-            catch
+            catch (Exception)
             {
                 return Unauthorized(new { Message = "Nieprawidłowy lub wygasły token." });
             }
+        }
+
+        private void SetTokenCookie(string token)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddHours(1)
+            };
+            Response.Cookies.Append("AuthToken", token, cookieOptions);
         }
     }
 }

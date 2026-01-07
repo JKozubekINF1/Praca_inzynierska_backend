@@ -9,5 +9,6 @@ namespace Market.Interfaces
         Task<SearchResultDto> SearchAsync(SearchQueryDto query);
         Task IndexManyAnnouncementsAsync(IEnumerable<Announcement> announcements);
         Task RemoveAsync(string objectId);
+        Task ConfigureIndexSettingsAsync();
     }
 }

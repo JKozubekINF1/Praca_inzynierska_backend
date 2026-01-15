@@ -160,6 +160,7 @@ namespace Market.Services
                 IsActive = a.IsActive,
                 PhoneNumber = a.PhoneNumber,
                 ContactPreference = a.ContactPreference,
+                UserId = a.UserId,
 
                 Photos = a.Photos.Select(p => new AnnouncementPhotoDto
                 {
@@ -176,6 +177,7 @@ namespace Market.Services
 
                 User = new UserSummaryDto
                 {
+                    Id = a.User.Id,
                     Username = a.User.Username,
                     PhoneNumber = a.User.PhoneNumber,
                     Email = a.User.Email
@@ -248,7 +250,7 @@ namespace Market.Services
 
             var all = await _context.Announcements
                 .Include(a => a.VehicleDetails)
-                .Include(a => a.PartDetails) 
+                .Include(a => a.PartDetails)
                 .Include(a => a.Photos)
                 .ToListAsync();
 

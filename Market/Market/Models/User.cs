@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; 
 
 namespace Market.Models
 {
@@ -33,6 +34,8 @@ namespace Market.Models
 
         public bool IsBanned { get; set; } = false;
 
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Balance { get; set; } = 0;
         public ICollection<Announcement>? Announcements { get; set; }
     }
 }

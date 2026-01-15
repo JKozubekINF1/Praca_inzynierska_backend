@@ -766,6 +766,78 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Market.Controllers.TransactionController",
+    "Method": "GetBalance",
+    "RelativePath": "api/transaction/balance",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Decimal",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Market.Controllers.TransactionController",
+    "Method": "BuyItem",
+    "RelativePath": "api/transaction/buy",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Market.DTOs.CreateOrderDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.TransactionController",
+    "Method": "GetHistory",
+    "RelativePath": "api/transaction/history",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Market.DTOs.OrderHistoryDto, Market, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Market.Controllers.TransactionController",
+    "Method": "TopUp",
+    "RelativePath": "api/transaction/top-up",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Market.DTOs.TopUpDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Market.Controllers.UsersController",
     "Method": "GetProfile",
     "RelativePath": "api/Users/me",

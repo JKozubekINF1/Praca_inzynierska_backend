@@ -14,6 +14,7 @@ namespace Market.Data
         public DbSet<AnnouncementFeature> AnnouncementFeatures { get; set; }
         public DbSet<SystemLog> SystemLogs { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,13 +55,32 @@ namespace Market.Data
                 .HasOne(f => f.User)
                 .WithMany()
                 .HasForeignKey(f => f.UserId)
-                .OnDelete(DeleteBehavior.Restrict); 
-                                                    
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Favorite>()
                 .HasOne(f => f.Announcement)
                 .WithMany()
                 .HasForeignKey(f => f.AnnouncementId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Buyer)
+                .WithMany()
+                .HasForeignKey(o => o.BuyerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Announcement)
+                .WithMany()
+                .HasForeignKey(o => o.AnnouncementId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.TotalAmount)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.Balance)
+                .HasColumnType("decimal(18,2)");
         }
     }
 }

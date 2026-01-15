@@ -39,7 +39,8 @@ builder.Services.AddScoped<UserSeeder>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<Market.Interfaces.IAdminService, Market.Services.AdminService>();
 builder.Services.AddScoped<Market.Interfaces.IUserService, Market.Services.UserService>();
-
+// Dodaj to obok innych serwisów
+builder.Services.AddScoped<IOrderService, OrderService>();
 // --- 4. ALGOLIA ---
 var algoliaSettings = builder.Configuration.GetSection("Algolia");
 string algoliaAppId = algoliaSettings["AppId"];

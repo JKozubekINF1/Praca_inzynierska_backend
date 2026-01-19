@@ -8,6 +8,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Security.Cryptography;
 using BCrypt.Net;
 
 namespace Market.Services
@@ -17,12 +18,14 @@ namespace Market.Services
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly RecaptchaService _recaptchaService;
+        private readonly IEmailService _emailService;
 
-        public AuthService(AppDbContext context, IConfiguration configuration, RecaptchaService recaptchaService)
+        public AuthService(AppDbContext context, IConfiguration configuration, RecaptchaService recaptchaService, IEmailService emailService)
         {
             _context = context;
             _configuration = configuration;
             _recaptchaService = recaptchaService;
+            _emailService = emailService;
         }
 
         public async Task<(bool Success, string Message)> RegisterAsync(RegisterDto dto)
@@ -106,6 +109,64 @@ namespace Market.Services
             {
                 throw new SecurityTokenException("Invalid token");
             }
+        }
+
+        public async Task<(bool Success, string Message)> ForgotPasswordAsync(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                return (true, "Jeśli konto istnieje, wysłano kod weryfikacyjny.");
+            }
+
+            var code = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
+
+            user.PasswordResetToken = code;
+            user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15); 
+
+            await _context.SaveChangesAsync();
+
+            var message = $@"
+                <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                    <h2>Reset hasła</h2>
+                    <p>Twój kod weryfikacyjny to:</p>
+                    <h1 style='background-color: #f0f0f0; padding: 10px; display: inline-block; letter-spacing: 5px;'>{code}</h1>
+                    <p>Kod jest ważny przez 15 minut.</p>
+                    <p>Jeśli to nie Ty prosiłeś o reset hasła, zignoruj tę wiadomość.</p>
+                </div>";
+
+            try
+            {
+                await _emailService.SendEmailAsync(user.Email, "Kod resetu hasła - Market", message);
+                return (true, "Jeśli konto istnieje, wysłano kod weryfikacyjny.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"BŁĄD SMTP: {ex.Message}");
+            }
+        }
+
+        public async Task<(bool Success, string Message)> ResetPasswordAsync(ResetPasswordDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+
+            if (user == null)
+                return (false, "Nieprawidłowy adres email.");
+
+            if (user.PasswordResetToken != dto.Code || user.ResetTokenExpires < DateTime.UtcNow)
+                return (false, "Nieprawidłowy lub wygasły kod weryfikacyjny.");
+
+            string passwordPattern = @"^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};:'"",.<>?]).+$";
+            if (!Regex.IsMatch(dto.NewPassword, passwordPattern))
+                return (false, "Hasło musi zawierać wielką literę i znak specjalny.");
+
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.NewPassword);
+            user.PasswordResetToken = null;
+            user.ResetTokenExpires = null;
+
+            await _context.SaveChangesAsync();
+
+            return (true, "Hasło zostało zmienione pomyślnie.");
         }
 
         private string GenerateJwtToken(User user)

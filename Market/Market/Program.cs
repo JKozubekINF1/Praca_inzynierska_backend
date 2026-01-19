@@ -33,14 +33,15 @@ builder.Services.AddScoped<ISearchService, AlgoliaSearchService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddHttpClient<Market.Services.IAiModerationService, Market.Services.OpenAiModerationService>();
 builder.Services.AddScoped<Market.Services.ILogService, Market.Services.LogService>();
-builder.Services.AddHttpClient<RecaptchaService>(); 
+builder.Services.AddHttpClient<RecaptchaService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<UserSeeder>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<Market.Interfaces.IAdminService, Market.Services.AdminService>();
 builder.Services.AddScoped<Market.Interfaces.IUserService, Market.Services.UserService>();
-// Dodaj to obok innych serwisów
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 // --- 4. ALGOLIA ---
 var algoliaSettings = builder.Configuration.GetSection("Algolia");
 string algoliaAppId = algoliaSettings["AppId"];
@@ -159,7 +160,7 @@ app.UseMiddleware<Market.Middleware.ErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

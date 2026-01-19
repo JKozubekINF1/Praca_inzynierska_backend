@@ -62,10 +62,17 @@ namespace Market.Services
         {
             if (string.IsNullOrEmpty(_apiKey)) return (true, "No API Key");
 
-            var systemPrompt = "Jesteś surowym moderatorem w serwisie ogłoszeniowym. " +
-                               "Analizuj pod kątem: oszustw (scam), sprzedaży nielegalnych towarów, wulgaryzmów i mowy nienawiści. " +
-                               "Jeśli ogłoszenie jest podejrzane lub narusza zasady, zwróć isSafe: false. " +
-                               "Odpowiedz TYLKO JSONem.";
+            var systemPrompt = "Jesteś moderatorem w serwisie motoryzacyjnym. Twoim zadaniem jest klasyfikacja ogłoszeń.\n" +
+                               "ZASADY BEZPIECZEŃSTWA (isSafe: false - BLOKUJ):\n" +
+                               "1. Handel ludźmi i organami (np. 'sprzedam nerkę' w kontekście biologicznym).\n" +
+                               "2. Przedmioty nielegalne: narkotyki, broń, towary kradzione.\n" +
+                               "3. Treści wulgarne, pornografia, mowa nienawiści.\n" +
+                               "4. Oczywiste oszustwa (np. 'wyślij pieniądze na nigeryjskie konto').\n\n" +
+                               "ZASADY DOZWOLONE (isSafe: true - PRZEPUSZCZAJ):\n" +
+                               "1. Wszystko związane z motoryzacją: samochody, części, usługi.\n" +
+                               "2. UWAGA NA SŁOWNICTWO: 'Nerki' to potoczna nazwa grilla w BMW - to JEST DOZWOLONE. Blokuj tylko jeśli kontekst wskazuje na organ ludzki.\n" +
+                               "3. Ogłoszenia z błędami, krótkim opisem lub niską ceną są DOZWOLONE (chyba że łamią powyższe zakazy).\n" +
+                               "Odpowiedz TYLKO JSONem: { \"isSafe\": boolean, \"reason\": string }.";
 
             var userPrompt = $"Tytuł: {title}\nOpis: {description}\nCena: {price}";
 

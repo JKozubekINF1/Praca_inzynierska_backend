@@ -37,5 +37,8 @@ namespace Market.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Balance { get; set; } = 0;
         public ICollection<Announcement>? Announcements { get; set; }
+
+        public string? PasswordResetToken { get; set; }
+        public DateTime? ResetTokenExpires { get; set; }
     }
 }

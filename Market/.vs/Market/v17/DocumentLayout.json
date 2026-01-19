@@ -1,7 +1,88 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\services\\openaimoderationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\services\\openaimoderationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\dtos\\passwordresetdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\dtos\\passwordresetdtos.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7091E05A-563B-409A-B99B-A82852859313}|Market.Tests\\Market.Tests.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market.tests\\services\\authservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7091E05A-563B-409A-B99B-A82852859313}|Market.Tests\\Market.Tests.csproj|solutionrelative:market.tests\\services\\authservicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\interfaces\\iemailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\services\\announcementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\services\\announcementservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\dtos\\createannouncementdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\dtos\\createannouncementdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\controllers\\announcementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\controllers\\announcementscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\dtos\\announcementdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\dtos\\announcementdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\models\\announcement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\models\\announcement.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\models\\vehicledetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\models\\vehicledetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\models\\partdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\models\\partdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\market.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\market.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|c:\\users\\tytaj\\documents\\github\\praca_inzynierska_backend\\market\\market\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{072354A3-2743-404C-9961-A4ED090A03B3}|Market\\Market.csproj|solutionrelative:market\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 1,
@@ -9,8 +90,21 @@
       "DocumentGroups": [
         {
           "DockedHeight": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 11,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "AuthServiceTests.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market.Tests\\Services\\AuthServiceTests.cs",
+              "RelativeDocumentMoniker": "Market.Tests\\Services\\AuthServiceTests.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market.Tests\\Services\\AuthServiceTests.cs",
+              "RelativeToolTip": "Market.Tests\\Services\\AuthServiceTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T17:07:29.222Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
@@ -20,8 +114,253 @@
               "Name": "ST:1:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
             },
             {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Market\\Controllers\\AuthController.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Market\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAAAFQAAABLAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T15:00:13.531Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Market\\Services\\AuthService.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\AuthService.cs",
+              "RelativeToolTip": "Market\\Services\\AuthService.cs",
+              "ViewState": "AgIAAJkAAAAAAAAAAAAmwHAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T14:59:59.525Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Interfaces\\IAuthService.cs",
+              "RelativeDocumentMoniker": "Market\\Interfaces\\IAuthService.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Interfaces\\IAuthService.cs",
+              "RelativeToolTip": "Market\\Interfaces\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T14:59:38.562Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Market\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\User.cs",
+              "RelativeToolTip": "Market\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T14:59:22.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "PasswordResetDtos.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\DTOs\\PasswordResetDtos.cs",
+              "RelativeDocumentMoniker": "Market\\DTOs\\PasswordResetDtos.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\DTOs\\PasswordResetDtos.cs",
+              "RelativeToolTip": "Market\\DTOs\\PasswordResetDtos.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T14:58:38.801Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "OpenAiModerationService.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\OpenAiModerationService.cs",
+              "RelativeDocumentMoniker": "Market\\Services\\OpenAiModerationService.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\OpenAiModerationService.cs",
+              "RelativeToolTip": "Market\\Services\\OpenAiModerationService.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAAcwEoAAABmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T12:07:08.399Z",
+              "EditorCaption": ""
+            },
+            {
               "$type": "Bookmark",
               "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "Market\\Services\\EmailService.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\EmailService.cs",
+              "RelativeToolTip": "Market\\Services\\EmailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T14:59:12.093Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Program.cs",
+              "RelativeDocumentMoniker": "Market\\Program.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Program.cs",
+              "RelativeToolTip": "Market\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACkAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T09:43:56.081Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\appsettings.json",
+              "RelativeDocumentMoniker": "Market\\appsettings.json",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\appsettings.json",
+              "RelativeToolTip": "Market\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-16T15:26:24.411Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{0ad07096-bba9-4900-a651-0598d26f6d24}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "IEmailService.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Interfaces\\IEmailService.cs",
+              "RelativeDocumentMoniker": "Market\\Interfaces\\IEmailService.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Interfaces\\IEmailService.cs",
+              "RelativeToolTip": "Market\\Interfaces\\IEmailService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T14:58:53.78Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AnnouncementsController.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Controllers\\AnnouncementsController.cs",
+              "RelativeDocumentMoniker": "Market\\Controllers\\AnnouncementsController.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Controllers\\AnnouncementsController.cs",
+              "RelativeToolTip": "Market\\Controllers\\AnnouncementsController.cs",
+              "ViewState": "AgIAADIAAAAAAAAAAAAiwFcAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T10:48:46.639Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "AnnouncementDto.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\DTOs\\AnnouncementDto.cs",
+              "RelativeDocumentMoniker": "Market\\DTOs\\AnnouncementDto.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\DTOs\\AnnouncementDto.cs",
+              "RelativeToolTip": "Market\\DTOs\\AnnouncementDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T10:35:50.156Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "AnnouncementService.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\AnnouncementService.cs",
+              "RelativeDocumentMoniker": "Market\\Services\\AnnouncementService.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Services\\AnnouncementService.cs",
+              "RelativeToolTip": "Market\\Services\\AnnouncementService.cs",
+              "ViewState": "AgIAAF0BAAAAAAAAAADwv5oBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T10:28:00.585Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "VehicleDetails.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\VehicleDetails.cs",
+              "RelativeDocumentMoniker": "Market\\Models\\VehicleDetails.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\VehicleDetails.cs",
+              "RelativeToolTip": "Market\\Models\\VehicleDetails.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T10:27:43.275Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "PartDetails.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\PartDetails.cs",
+              "RelativeDocumentMoniker": "Market\\Models\\PartDetails.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\PartDetails.cs",
+              "RelativeToolTip": "Market\\Models\\PartDetails.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T10:27:38.727Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "CreateAnnouncementDto.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\DTOs\\CreateAnnouncementDto.cs",
+              "RelativeDocumentMoniker": "Market\\DTOs\\CreateAnnouncementDto.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\DTOs\\CreateAnnouncementDto.cs",
+              "RelativeToolTip": "Market\\DTOs\\CreateAnnouncementDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T10:27:29.657Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Announcement.cs",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\Announcement.cs",
+              "RelativeDocumentMoniker": "Market\\Models\\Announcement.cs",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Models\\Announcement.cs",
+              "RelativeToolTip": "Market\\Models\\Announcement.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T10:27:17.357Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "Market\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\appsettings.Development.json",
+              "RelativeToolTip": "Market\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-01-16T15:26:52.731Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Market.csproj",
+              "DocumentMoniker": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Market.csproj",
+              "RelativeDocumentMoniker": "Market\\Market.csproj",
+              "ToolTip": "C:\\Users\\tytaj\\Documents\\GitHub\\Praca_inzynierska_backend\\Market\\Market\\Market.csproj",
+              "RelativeToolTip": "Market\\Market.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-01-16T12:24:38.607Z"
             }
           ]
         }

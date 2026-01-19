@@ -33,16 +33,23 @@ namespace Market.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var token = await _authService.LoginAsync(dto);
-
-            if (token == null)
+            try
             {
-                return Unauthorized(new { Message = "Nieprawidłowa nazwa użytkownika lub hasło." });
+                var token = await _authService.LoginAsync(dto);
+
+                if (token == null)
+                {
+                    return Unauthorized(new { Message = "Nieprawidłowa nazwa użytkownika lub hasło." });
+                }
+
+                SetTokenCookie(token);
+
+                return Ok(new { Message = "Zalogowano pomyślnie." });
             }
-
-            SetTokenCookie(token);
-
-            return Ok(new { Message = "Zalogowano pomyślnie." });
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { Message = ex.Message });
+            }
         }
 
         [HttpPost("logout")]
@@ -70,6 +77,29 @@ namespace Market.Controllers
             {
                 return Unauthorized(new { Message = "Nieprawidłowy lub wygasły token." });
             }
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
+        {
+            var result = await _authService.ForgotPasswordAsync(dto.Email);
+            if (!result.Success && result.Message.Contains("błąd"))
+                return StatusCode(500, new { Message = result.Message });
+
+            return Ok(new { Message = result.Message });
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            var result = await _authService.ResetPasswordAsync(dto);
+
+            if (!result.Success)
+            {
+                return BadRequest(new { Message = result.Message });
+            }
+
+            return Ok(new { Message = result.Message });
         }
 
         private void SetTokenCookie(string token)

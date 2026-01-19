@@ -3,6 +3,7 @@ using Market.Data;
 using Market.DTOs;
 using Market.Models;
 using Market.Services;
+using Market.Interfaces; 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,6 +21,7 @@ namespace Market.Tests.Services
         private readonly AppDbContext _context;
         private readonly Mock<IConfiguration> _mockConfig;
         private readonly Mock<IWebHostEnvironment> _mockEnv;
+        private readonly Mock<IEmailService> _mockEmailService; 
         private readonly RecaptchaService _realRecaptchaService;
         private readonly AuthService _service;
 
@@ -40,6 +42,11 @@ namespace Market.Tests.Services
 
             _mockEnv = new Mock<IWebHostEnvironment>();
             _mockEnv.Setup(e => e.EnvironmentName).Returns("Development");
+
+            _mockEmailService = new Mock<IEmailService>();
+            _mockEmailService.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                             .Returns(Task.CompletedTask);
+
             var httpClient = new HttpClient();
 
             _realRecaptchaService = new RecaptchaService(
@@ -48,7 +55,7 @@ namespace Market.Tests.Services
                 _mockEnv.Object
             );
 
-            _service = new AuthService(_context, _mockConfig.Object, _realRecaptchaService);
+            _service = new AuthService(_context, _mockConfig.Object, _realRecaptchaService, _mockEmailService.Object);
         }
 
         private User CreateUser(string username, string email, string password)
@@ -227,6 +234,84 @@ namespace Market.Tests.Services
         {
             string badToken = "To.Nie.Jest.Token";
             Assert.Throws<SecurityTokenException>(() => _service.Verify(badToken));
+        }
+
+
+        [Fact]
+        public async Task ForgotPasswordAsync_ShouldSendEmail_WhenUserExists()
+        {
+            var user = CreateUser("ForgotUser", "forgot@test.com", "Pass1!");
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var result = await _service.ForgotPasswordAsync("forgot@test.com");
+
+            result.Success.Should().BeTrue();
+            _mockEmailService.Verify(x => x.SendEmailAsync("forgot@test.com", It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
+            var dbUser = await _context.Users.FirstAsync(u => u.Email == "forgot@test.com");
+            dbUser.PasswordResetToken.Should().NotBeNull();
+            dbUser.ResetTokenExpires.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task ForgotPasswordAsync_ShouldReturnTrue_WhenUserDoesNotExist()
+        {
+            var result = await _service.ForgotPasswordAsync("nonexistent@test.com");
+
+            result.Success.Should().BeTrue();
+            _mockEmailService.Verify(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task ResetPasswordAsync_ShouldSucceed_WhenCodeIsValid()
+        {
+            var user = CreateUser("ResetUser", "reset@test.com", "OldPass1!");
+            user.PasswordResetToken = "123456";
+            user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var dto = new ResetPasswordDto
+            {
+                Email = "reset@test.com",
+                Code = "123456",
+                NewPassword = "NewPassword1!"
+            };
+
+            var result = await _service.ResetPasswordAsync(dto);
+
+            result.Success.Should().BeTrue();
+
+            var dbUser = await _context.Users.FirstAsync(u => u.Email == "reset@test.com");
+            dbUser.PasswordResetToken.Should().BeNull(); 
+
+            bool oldPassVerify = BCrypt.Net.BCrypt.Verify("OldPass1!", dbUser.PasswordHash);
+            oldPassVerify.Should().BeFalse();
+
+            bool newPassVerify = BCrypt.Net.BCrypt.Verify("NewPassword1!", dbUser.PasswordHash);
+            newPassVerify.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task ResetPasswordAsync_ShouldFail_WhenCodeIsWrong()
+        {
+            var user = CreateUser("WrongCodeUser", "wrong@test.com", "Pass1!");
+            user.PasswordResetToken = "123456";
+            user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var dto = new ResetPasswordDto
+            {
+                Email = "wrong@test.com",
+                Code = "654321", 
+                NewPassword = "NewPassword1!"
+            };
+
+            var result = await _service.ResetPasswordAsync(dto);
+
+            result.Success.Should().BeFalse();
         }
     }
 }

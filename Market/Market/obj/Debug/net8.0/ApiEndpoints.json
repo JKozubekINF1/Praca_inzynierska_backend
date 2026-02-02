@@ -669,6 +669,22 @@
   },
   {
     "ContainingType": "Market.Controllers.AuthController",
+    "Method": "Activate",
+    "RelativePath": "api/Auth/activate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dto",
+        "Type": "Market.DTOs.ActivateAccountDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Market.Controllers.AuthController",
     "Method": "ForgotPassword",
     "RelativePath": "api/Auth/forgot-password",
     "HttpMethod": "POST",

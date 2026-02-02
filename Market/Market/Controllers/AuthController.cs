@@ -52,6 +52,19 @@ namespace Market.Controllers
             }
         }
 
+        [HttpPost("activate")]
+        public async Task<IActionResult> Activate([FromBody] ActivateAccountDto dto)
+        {
+            var result = await _authService.ActivateAccountAsync(dto.Token);
+
+            if (!result.Success)
+            {
+                return BadRequest(new { Message = result.Message });
+            }
+
+            return Ok(new { Message = result.Message });
+        }
+
         [HttpPost("logout")]
         public IActionResult Logout()
         {
@@ -83,7 +96,7 @@ namespace Market.Controllers
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
         {
             var result = await _authService.ForgotPasswordAsync(dto.Email);
-            if (!result.Success && result.Message.Contains("błąd"))
+            if (!result.Success && result.Message.Contains("BŁĄD"))
                 return StatusCode(500, new { Message = result.Message });
 
             return Ok(new { Message = result.Message });

@@ -9,5 +9,6 @@ namespace Market.Interfaces
         VerifyResultDto Verify(string token);
         Task<(bool Success, string Message)> ForgotPasswordAsync(string email);
         Task<(bool Success, string Message)> ResetPasswordAsync(ResetPasswordDto dto);
+        Task<(bool Success, string Message)> ActivateAccountAsync(string token);
     }
 }

@@ -44,18 +44,40 @@ namespace Market.Services
             if (await _context.Users.AnyAsync(u => u.Username == dto.Username || u.Email == dto.Email))
                 return (false, "Użytkownik o podanej nazwie lub emailu już istnieje.");
 
+            var activationCode = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
+
             var user = new User
             {
                 Username = dto.Username,
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                IsBanned = false
+                IsBanned = false,
+                IsEmailConfirmed = false,
+                ActivationToken = activationCode
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return (true, "Rejestracja zakończona sukcesem.");
+            var message = $@"
+                <div style='font-family: Arial, sans-serif; padding: 20px; color: #333;'>
+                    <h2>Witaj w Market!</h2>
+                    <p>Dziękujemy za rejestrację. Aby aktywować konto, wpisz poniższy kod w aplikacji:</p>
+                    <div style='background-color: #f3f4f6; padding: 15px; text-align: center; font-size: 24px; letter-spacing: 5px; font-weight: bold; border-radius: 8px;'>
+                        {activationCode}
+                    </div>
+                    <p>Jeśli to nie Ty zakładałeś konto, zignoruj tę wiadomość.</p>
+                </div>";
+
+            try
+            {
+                await _emailService.SendEmailAsync(dto.Email, "Kod aktywacyjny - Market", message);
+            }
+            catch
+            {
+            }
+
+            return (true, "Rejestracja pomyślna. Wpisz kod otrzymany w emailu.");
         }
 
         public async Task<string?> LoginAsync(LoginDto dto)
@@ -71,7 +93,28 @@ namespace Market.Services
             if (user.IsBanned)
                 throw new UnauthorizedAccessException("Twoje konto zostało zablokowane. Skontaktuj się z administracją.");
 
+            if (!user.IsEmailConfirmed)
+                throw new UnauthorizedAccessException("Konto nie jest aktywne. Wpisz kod aktywacyjny z maila.");
+
             return GenerateJwtToken(user);
+        }
+
+        public async Task<(bool Success, string Message)> ActivateAccountAsync(string token)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.ActivationToken == token);
+
+            if (user == null)
+                return (false, "Nieprawidłowy kod aktywacyjny.");
+
+            if (user.IsEmailConfirmed)
+                return (true, "Konto jest już aktywne.");
+
+            user.IsEmailConfirmed = true;
+            user.ActivationToken = null;
+
+            await _context.SaveChangesAsync();
+
+            return (true, "Konto zostało pomyślnie aktywowane. Możesz się zalogować.");
         }
 
         public VerifyResultDto Verify(string token)
@@ -122,7 +165,7 @@ namespace Market.Services
             var code = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
 
             user.PasswordResetToken = code;
-            user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15); 
+            user.ResetTokenExpires = DateTime.UtcNow.AddMinutes(15);
 
             await _context.SaveChangesAsync();
 
@@ -132,7 +175,6 @@ namespace Market.Services
                     <p>Twój kod weryfikacyjny to:</p>
                     <h1 style='background-color: #f0f0f0; padding: 10px; display: inline-block; letter-spacing: 5px;'>{code}</h1>
                     <p>Kod jest ważny przez 15 minut.</p>
-                    <p>Jeśli to nie Ty prosiłeś o reset hasła, zignoruj tę wiadomość.</p>
                 </div>";
 
             try

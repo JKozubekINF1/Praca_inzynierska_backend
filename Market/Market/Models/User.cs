@@ -40,5 +40,8 @@ namespace Market.Models
 
         public string? PasswordResetToken { get; set; }
         public DateTime? ResetTokenExpires { get; set; }
+
+        public bool IsEmailConfirmed { get; set; } = false;
+        public string? ActivationToken { get; set; }
     }
 }
